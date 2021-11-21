@@ -75,7 +75,7 @@ plot(usagers$catu, main = "Nombre d'usagers par catégorie d'usagers")
 tab_grav <- table(usagers$grav)
 tab_grav
 
-plot(usagers$grav, "Nombre d'usagers par niveau de gravité")
+plot(usagers$grav, main = "Nombre d'usagers par niveau de gravité")
 
 # Nombre d'usagers par sexe
 # 1 = Masculin
