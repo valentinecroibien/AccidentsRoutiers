@@ -15,16 +15,31 @@ lieux <- read.csv2(file="data/lieux-2019.csv")
 usagers <- read.csv2(file="data/usagers-2019.csv")
 vehic <- read.csv2(file="data/vehicules-2019.csv")
 
+# on garde les variables utiles
+var_carac <- c("Num_Acc","jour","mois","hrmn","lum","com","agg","int","atm","col")
+carac <- carac[,var_carac]
+
+var_lieux <- c("catr","voie","circ","nbv","vosp","prof",
+               "plan","larrout","surf","infra","situ","vma")
+lieux <- lieux[,var_lieux]
+
+var_vehic <- c("id_vehicule.x","catv","obs","obsm","manv","motor")
+vehic <- vehic[,var_vehic]
+
+var_usagers <- c("catu","grav",
+                 "sexe","an_nais","trajet","secu1","secu2","secu3","locp","actp","etatp")
+usagers <- usagers[,var_usagers]
+
+
 ### création de la base finale
 # jointures
 carac_lieux <- inner_join(carac,lieux,by="Num_Acc")
 usagers_vehic <- inner_join(usagers,vehic,by="Num_Acc")
 df <- inner_join(carac_lieux,usagers_vehic,by="Num_Acc")
-# on garde les variables utiles
-var <- c("Num_Acc","jour","mois","hrmn","lum","com","agg","int","atm","col","catr","voie","circ","nbv","vosp","prof",
-         "plan","larrout","surf","infra","situ","vma","id_vehicule.x","catv","obs","obsm","manv","motor","catu","grav",
-         "sexe","an_nais","trajet","secu1","secu2","secu3","locp","actp","etatp")
-df <- df[,var]
+
+
+
+
 
 ### formats variables
 summary(df)
