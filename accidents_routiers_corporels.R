@@ -33,10 +33,10 @@ usagers <- usagers[,var_usagers]
 
 ### création de la base finale
 # jointures 
-# À modifier -
 carac_lieux <- inner_join(carac,lieux,by="Num_Acc")
-usagers_vehic <- inner_join(usagers,vehic,by="Num_Acc")
-
+usagers_vehic <- inner_join(usagers,vehic,by="id_vehicule")
+colnames(usagers_vehic)[1] <- "Num_Acc"
+usagers_vehic <- usagers_vehic[,-14]
 df <- inner_join(carac_lieux,usagers_vehic,by="Num_Acc")
 
 
@@ -83,7 +83,7 @@ df$infra <- as.factor(df$infra)
 # situation de l'accident
 df$situ <- as.factor(df$situ)
 # id vehicule
-df$id_vehicule.x <- as.factor(df$id_vehicule.x)
+df$id_vehicule <- as.factor(df$id_vehicule)
 # catégorie du véhicule
 df$catv <- as.factor(df$catv)
 # obstacle fixe heurté
