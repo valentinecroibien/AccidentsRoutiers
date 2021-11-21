@@ -19,25 +19,25 @@ vehic <- read.csv2(file="data/vehicules-2019.csv")
 var_carac <- c("Num_Acc","jour","mois","hrmn","lum","com","agg","int","atm","col")
 carac <- carac[,var_carac]
 
-var_lieux <- c("catr","voie","circ","nbv","vosp","prof",
+var_lieux <- c("Num_Acc","catr","voie","circ","nbv","vosp","prof",
                "plan","larrout","surf","infra","situ","vma")
 lieux <- lieux[,var_lieux]
 
-var_vehic <- c("id_vehicule.x","catv","obs","obsm","manv","motor")
+var_vehic <- c("Num_Acc", "id_vehicule","catv","obs","obsm","manv","motor")
 vehic <- vehic[,var_vehic]
 
-var_usagers <- c("catu","grav",
+var_usagers <- c("Num_Acc", "id_vehicule", "catu","grav",
                  "sexe","an_nais","trajet","secu1","secu2","secu3","locp","actp","etatp")
 usagers <- usagers[,var_usagers]
 
 
 ### création de la base finale
-# jointures
+# jointures 
+# À modifier -
 carac_lieux <- inner_join(carac,lieux,by="Num_Acc")
 usagers_vehic <- inner_join(usagers,vehic,by="Num_Acc")
+
 df <- inner_join(carac_lieux,usagers_vehic,by="Num_Acc")
-
-
 
 
 
