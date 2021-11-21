@@ -30,6 +30,77 @@ var_usagers <- c("id_vehicule", "catu","grav",
                  "sexe","an_nais","trajet","secu1","secu2","secu3","locp","actp","etatp")
 usagers <- usagers[,var_usagers]
 
+# Statistiques descriptives des bases initiales
+## Base usagers
+str(usagers)
+
+# catégorie de l'usager
+usagers$catu <- as.factor(usagers$catu)
+# gravité de l'accident
+usagers$grav <- as.factor(usagers$grav)
+# sexe
+usagers$sexe <- as.factor(usagers$sexe)
+# type de trajet
+usagers$trajet <- as.factor(usagers$trajet)
+# utilisation sécurité
+usagers$secu1 <- as.factor(usagers$secu1)
+usagers$secu2 <- as.factor(usagers$secu2)
+usagers$secu3 <- as.factor(usagers$secu3)
+# localisation du piéton
+usagers$locp <- as.factor(usagers$locp)
+# action du pieton
+usagers$actp <- as.factor(usagers$actp)
+# piéton seul ou non
+usagers$etatp <- as.factor(usagers$etatp)
+
+str(usagers)
+# 12 variables, 132977 usagers
+
+summary(usagers)
+
+# Nombre d'usagers par catégorie d'usagers
+# 1 = Conducteur
+# 2 = Passager
+# 3 = Piéton
+
+tab_catu <- table(usagers$catu)
+tab_catu
+plot(usagers$catu, main = "Nombre d'usagers par catégorie d'usagers")
+
+# Nombre d'usagers par niveau de gravité
+# 1 =  Indemne  
+# 2 = Tué  
+# 3 = Blessé hospitalisé  
+# 4 = Blessé léger  
+tab_grav <- table(usagers$grav)
+tab_grav
+
+plot(usagers$grav, "Nombre d'usagers par niveau de gravité")
+
+# Nombre d'usagers par sexe
+# 1 = Masculin
+# 2 = Féminin
+tab_sexe <- table(usagers$sexe)
+tab_sexe
+
+plot(usagers$sexe, main = "Nombre d'usagers par sexe")
+
+# Nombre d'usagers par type de trajet
+# -1 – Non renseigné   
+# 0 – Non renseigné  
+# 1 – Domicile – travail  
+# 2 – Domicile – école  
+# 3 – Courses – achats  
+# 4 – Utilisation professionnelle  
+# 5 – Promenade – loisirs  
+# 9 – Autre 
+tab_trajet <- table(usagers$trajet)
+tab_trajet
+
+plot(usagers$trajet, main = "Nombre d'usagers par type de trajet")
+
+
+
 
 ### création de la base finale
 # jointures 
@@ -92,26 +163,9 @@ df$obsm <- as.factor(df$obsm)
 df$manv <- as.factor(df$manv)
 # motorisation
 df$motor <- as.factor(df$motor)
-# catégorie de l'usager
-df$catu <- as.factor(df$catu)
-# gravité de l'accident
-df$grav <- as.factor(df$grav)
-# sexe
-df$sexe <- as.factor(df$sexe)
-# type de trajet
-df$trajet <- as.factor(df$trajet)
-# utilisation sécurité
-df$secu1 <- as.factor(df$secu1)
-df$secu2 <- as.factor(df$secu2)
-df$secu3 <- as.factor(df$secu3)
-# localisation du piéton
-df$locp <- as.factor(df$locp)
-# action du pieton
-df$actp <- as.factor(df$actp)
-# piéton seul ou non
-df$etatp <- as.factor(df$etatp)
 
 ### valeurs aberantes ??
+
 
 
 
