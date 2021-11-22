@@ -118,7 +118,7 @@ usagers$trajet <- as.factor(usagers$trajet)
 ## Base caracteristiques
 which(carac$atm==-1)
 which(carac$col==-1)
-which(carac$adr==na | carac$adr=="-")
+which(carac$adr==NaN | carac$adr=="-")
 carac<-carac[-c(2247,5578,5782,6796,52842),]
 
 ## Base lieux
