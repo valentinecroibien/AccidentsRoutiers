@@ -28,8 +28,8 @@ vehic <- read.csv2(file="data/vehicules-2019.csv")
 var_carac <- c("Num_Acc","jour","mois","hrmn","lum","com","agg","int","atm","col")
 carac <- carac[,var_carac]
 
-var_lieux <- c("Num_Acc","catr","voie","circ","nbv","vosp","prof",
-               "plan","surf","infra","situ","vma") #larrout retiré car trop de NA
+var_lieux <- c("Num_Acc","catr","circ","nbv","vosp","prof",
+               "plan","surf","infra","situ","vma")
 lieux <- lieux[,var_lieux]
 
 var_vehic <- c("Num_Acc", "id_vehicule","catv","obs","obsm","manv","motor")
@@ -110,6 +110,19 @@ usagers$grav <- as.factor(usagers$grav)
 usagers$sexe <- as.factor(usagers$sexe)
 # type de trajet
 usagers$trajet <- as.factor(usagers$trajet)
+
+
+
+### Valeurs manquantes et abérrantes
+
+## Base caracteristiques
+which(carac$atm==-1)
+which(carac$col==-1)
+which(carac$adr==na | carac$adr=="-")
+carac<-carac[-c(2247,5578,5782,6796,52842),]
+
+## Base lieux
+
 
 
 
