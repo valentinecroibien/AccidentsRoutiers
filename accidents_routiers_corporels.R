@@ -176,8 +176,6 @@ View(regime_circ)
 # Nombre de voies
 summary(lieux$nbv) # Valeurs aberantes -1
 
-str_replace_all(lieux$nbv,pattern="-1",replacement=NA)
-
 nb_voies <- data.frame(table(lieux$nbv))
 colnames(nb_voies) <- c("Nb_voies","Nb_acc")
 nb_voies$Freq_acc <- round(prop.table(table(lieux$nbv))*100,2)
