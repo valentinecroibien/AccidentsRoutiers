@@ -35,7 +35,7 @@ lieux <- lieux[,var_lieux]
 var_vehic <- c("Num_Acc", "id_vehicule","catv","obs","obsm","manv","motor")
 vehic <- vehic[,var_vehic]
 
-var_usagers <- c("id_vehicule", "catu","grav",
+var_usagers <- c("Num_Acc","id_vehicule", "catu","grav",
                  "sexe","an_nais","trajet","secu1","secu2","secu3","locp","actp","etatp")
 usagers <- usagers[,var_usagers]
 
