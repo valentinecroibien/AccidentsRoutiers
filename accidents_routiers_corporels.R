@@ -29,7 +29,7 @@ var_carac <- c("Num_Acc","jour","mois","hrmn","lum","com","agg","int","atm","col
 carac <- carac[,var_carac]
 
 var_lieux <- c("Num_Acc","catr","voie","circ","nbv","vosp","prof",
-               "plan","larrout","surf","infra","situ","vma")
+               "plan","surf","infra","situ","vma") #larrout retiré car trop de NA
 lieux <- lieux[,var_lieux]
 
 var_vehic <- c("Num_Acc", "id_vehicule","catv","obs","obsm","manv","motor")
@@ -233,9 +233,6 @@ virage$Type_plan <- str_replace_all(virage$Type_plan, pattern = c("-1","1","2","
                                       replacement = c("Non renseigné","Rectiligne","Gauche",
                                                       "Droite","S"))
 View(virage)
-
-# Largeur de la route (larrout)
-# trop de NA
 
 # Etat de la surface (surf)
 surface <- data.frame(table(lieux$surf))
