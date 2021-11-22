@@ -28,15 +28,15 @@ vehic <- read.csv2(file="data/vehicules-2019.csv")
 var_carac <- c("Num_Acc","jour","mois","hrmn","lum","com","agg","int","atm","col")
 carac <- carac[,var_carac]
 
-var_lieux <- c("Num_Acc","catr","voie","circ","nbv","vosp","prof",
-               "plan","larrout","surf","infra","situ","vma")
+var_lieux <- c("Num_Acc","catr","circ","nbv","vosp","prof",
+               "plan","surf","infra","situ","vma")
 lieux <- lieux[,var_lieux]
 
 var_vehic <- c("Num_Acc", "id_vehicule","catv","obs","obsm","manv","motor")
 vehic <- vehic[,var_vehic]
 
 var_usagers <- c("Num_Acc","id_vehicule", "catu","grav",
-                 "sexe","an_nais","trajet","secu1","secu2","secu3","locp","actp","etatp")
+                 "sexe","an_nais","trajet")
 usagers <- usagers[,var_usagers]
 
 
@@ -80,8 +80,6 @@ lieux$vosp <- as.factor(lieux$vosp)
 lieux$prof <- as.factor(lieux$prof)
 # virage
 lieux$plan <- as.factor(lieux$plan)
-# largeur de la route
-lieux$larrout <- as.double(lieux$larrout)
 # etat de la surface
 lieux$surf <- as.factor(lieux$surf)
 # infrastructures
@@ -112,16 +110,19 @@ usagers$grav <- as.factor(usagers$grav)
 usagers$sexe <- as.factor(usagers$sexe)
 # type de trajet
 usagers$trajet <- as.factor(usagers$trajet)
-# utilisation sécurité
-usagers$secu1 <- as.factor(usagers$secu1)
-usagers$secu2 <- as.factor(usagers$secu2)
-usagers$secu3 <- as.factor(usagers$secu3)
-# localisation du piéton
-usagers$locp <- as.factor(usagers$locp)
-# action du pieton
-usagers$actp <- as.factor(usagers$actp)
-# piéton seul ou non
-usagers$etatp <- as.factor(usagers$etatp)
+
+
+
+### Valeurs manquantes et abérrantes
+
+## Base caracteristiques
+which(carac$atm==-1)
+which(carac$col==-1)
+which(carac$adr==NaN | carac$adr=="-")
+carac<-carac[-c(2247,5578,5782,6796,52842),]
+
+## Base lieux
+
 
 
 
@@ -233,9 +234,6 @@ virage$Type_plan <- str_replace_all(virage$Type_plan, pattern = c("-1","1","2","
                                       replacement = c("Non renseigné","Rectiligne","Gauche",
                                                       "Droite","S"))
 View(virage)
-
-# Largeur de la route (larrout)
-# trop de NA
 
 # Etat de la surface (surf)
 surface <- data.frame(table(lieux$surf))
@@ -387,7 +385,6 @@ plot(vehic$obs, main = "Nombre de vehicules par obstacle heurté fixe")
 #5 – Animal domestique
 #6 – Animal sauvage
 #9 – Autre
-
 tab_obs_mobil <- table(vehic$obsm)
 tab_obs_mobil
 
@@ -401,7 +398,6 @@ plot(vehic$obsm, main = "Nombre de vehicules par obstacle heurté mobile")
 #4 – Hydrogène
 #5 – Humaine
 #6 – Autre
-
 tab_motor<- table(vehic$motor)
 View (tab_motor)
 
