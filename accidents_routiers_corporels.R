@@ -80,8 +80,6 @@ lieux$vosp <- as.factor(lieux$vosp)
 lieux$prof <- as.factor(lieux$prof)
 # virage
 lieux$plan <- as.factor(lieux$plan)
-# largeur de la route
-lieux$larrout <- as.double(lieux$larrout)
 # etat de la surface
 lieux$surf <- as.factor(lieux$surf)
 # infrastructures
