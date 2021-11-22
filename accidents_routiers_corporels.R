@@ -36,7 +36,7 @@ var_vehic <- c("Num_Acc", "id_vehicule","catv","obs","obsm","manv","motor")
 vehic <- vehic[,var_vehic]
 
 var_usagers <- c("Num_Acc","id_vehicule", "catu","grav",
-                 "sexe","an_nais","trajet","secu1","secu2","secu3","locp","actp","etatp")
+                 "sexe","an_nais","trajet")
 usagers <- usagers[,var_usagers]
 
 
@@ -110,16 +110,6 @@ usagers$grav <- as.factor(usagers$grav)
 usagers$sexe <- as.factor(usagers$sexe)
 # type de trajet
 usagers$trajet <- as.factor(usagers$trajet)
-# utilisation sécurité
-usagers$secu1 <- as.factor(usagers$secu1)
-usagers$secu2 <- as.factor(usagers$secu2)
-usagers$secu3 <- as.factor(usagers$secu3)
-# localisation du piéton
-usagers$locp <- as.factor(usagers$locp)
-# action du pieton
-usagers$actp <- as.factor(usagers$actp)
-# piéton seul ou non
-usagers$etatp <- as.factor(usagers$etatp)
 
 
 
