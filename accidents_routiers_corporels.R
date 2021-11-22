@@ -285,6 +285,7 @@ situation$Type_situ <- str_replace_all(situation$Type_situ, pattern = c("-1","1"
 View(situation)
 
 # Vitesse max autorisée (vma)
+summary(lieux$vma) # valeurs aberrantes -1
 mean_vma_indemne <- mean(lieux_usagers$vma[lieux_usagers$grav==1])
 mean_vma_indemne
 mean_vma_leger <- mean(lieux_usagers$vma[lieux_usagers$grav==4])
