@@ -340,3 +340,68 @@ tab_trajet <- table(usagers$trajet)
 tab_trajet
 
 plot(usagers$trajet, main = "Nombre d'usagers par type de trajet")
+### Base vehicules
+str(vehic)
+# 7 variables, 100710 véhicules
+
+summary(vehic)
+
+# Nombre de vehicules selon leur catégorie
+# Renommer ces colonnes
+tab_catv <- table(vehic$catv)
+View (tab_catv)
+plot(vehic$catv, main = "Nombre de vehicules selon leur catégorie")
+
+# Nombre de vehicules par obstacle heurté fixe
+#-1 – Non renseigné
+#0 – Sans objet
+#1 – Véhicule en stationnement
+#2 – Arbre
+#3 – Glissière métallique
+#4 – Glissière béton
+#5 – Autre glissière
+#6 – Bâtiment, mur, pile de pont
+#7 – Support de signalisation verticale ou poste d’appel d’urgence
+#8 – Poteau
+#9 – Mobilier urbain
+#10 – Parapet
+#11 – Ilot, refuge, borne haute
+#12 – Bordure de trottoir
+#13 – Fossé, talus, paroi rocheuse
+#14 – Autre obstacle fixe sur chaussée
+#15 – Autre obstacle fixe sur trottoir ou accotement
+#16 – Sortie de chaussée sans obstacle
+#17 – Buse – tête d’aqueduc
+tab_obs <- table(vehic$obs)
+View(tab_obs)
+
+plot(vehic$obs, main = "Nombre de vehicules par obstacle heurté fixe")
+
+# Nombre de vehicules par obstacle heurté mobile
+#-1 – Non renseigné
+#0 – Aucun
+#1 – Piéton
+#2 – Véhicule
+#4 – Véhicule sur rail
+#5 – Animal domestique
+#6 – Animal sauvage
+#9 – Autre
+
+tab_obs_mobil <- table(vehic$obsm)
+tab_obs_mobil
+
+plot(vehic$obsm, main = "Nombre de vehicules par obstacle heurté mobile")
+
+# Nombre de vehicules par type de motorisation du véhicule
+#-1 – Non renseigné 0 – Inconnue
+#1 – Hydrocarbures
+#2 – Hybride électrique
+#3 – Electrique
+#4 – Hydrogène
+#5 – Humaine
+#6 – Autre
+
+tab_motor<- table(vehic$motor)
+View (tab_motor)
+
+plot(vehic$motor, main = "Nombre de vehicules par type de motorisation du véhicule")
