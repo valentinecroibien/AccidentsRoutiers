@@ -122,7 +122,8 @@ which(carac$adr==NaN | carac$adr=="-")
 carac<-carac[-c(2247,5578,5782,6796,52842),]
 
 ## Base lieux
-
+lieux$surf <- str_replace_all(lieux$surf, pattern = "-1", 
+                replacement = "9")
 
 
 
@@ -245,9 +246,9 @@ surface$Freq_Indemne <- round(grav_surface[,1]/apply(grav_surface,1,sum)*100,2)
 surface$Freq_Leger <- round(grav_surface[,4]/apply(grav_surface,1,sum)*100,2)
 surface$Freq_Hosp <- round(grav_surface[,3]/apply(grav_surface,1,sum)*100,2)
 surface$Freq_Deces <- round(grav_surface[,2]/apply(grav_surface,1,sum)*100,2)
-surface$Type_surface <- str_replace_all(surface$Type_surface, pattern = c("-1","1","2","3","4","5","6","7","8","9"), 
-                                    replacement = c("Non renseigné","Normale","Mouillée","Flaques","Inondée","Enneigée",
-                                                    "Boue","Verglacée","Corps gras ou huile","Autre"))
+surface$Type_surface <- str_replace_all(surface$Type_surface, pattern = c("1","2","3","4","5","6","7","8","9"), 
+                                        replacement = c("Normale","Mouillée","Flaques","Inondée","Enneigée",
+                                                        "Boue","Verglacée","Corps gras ou huile","Autre"))
 View(surface)
 
 # Infrastructures (infra)
