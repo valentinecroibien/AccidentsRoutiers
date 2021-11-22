@@ -384,7 +384,6 @@ plot(vehic$obs, main = "Nombre de vehicules par obstacle heurté fixe")
 #5 – Animal domestique
 #6 – Animal sauvage
 #9 – Autre
-
 tab_obs_mobil <- table(vehic$obsm)
 tab_obs_mobil
 
@@ -398,7 +397,6 @@ plot(vehic$obsm, main = "Nombre de vehicules par obstacle heurté mobile")
 #4 – Hydrogène
 #5 – Humaine
 #6 – Autre
-
 tab_motor<- table(vehic$motor)
 View (tab_motor)
 
