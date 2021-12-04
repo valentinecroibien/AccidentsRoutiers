@@ -123,7 +123,7 @@ carac<-carac[-c(2247,5578,5782,6796,52842),]
 
 ## Base lieux
 lieux$surf <- str_replace_all(lieux$surf, pattern = "-1", 
-                replacement = "9")
+                              replacement = "9")
 
 
 
@@ -157,9 +157,9 @@ categ_routes$Freq_Leger <- round(grav_categ_routes[,4]/apply(grav_categ_routes,1
 categ_routes$Freq_Hosp <- round(grav_categ_routes[,3]/apply(grav_categ_routes,1,sum)*100,2)
 categ_routes$Freq_Deces <- round(grav_categ_routes[,2]/apply(grav_categ_routes,1,sum)*100,2)
 categ_routes$Type_route <- str_replace_all(categ_routes$Type_route, pattern = c("1","2","3","4","5","6","7","9"), 
-                                      replacement = c("Autoroute","Nationale","Départementale",
-                                                      "Voie Communales","Hors réseau public",
-                                                      "Parking","Route metropole urbaine","Autre"))
+                                           replacement = c("Autoroute","Nationale","Départementale",
+                                                           "Voie Communales","Hors réseau public",
+                                                           "Parking","Route metropole urbaine","Autre"))
 View(categ_routes)
 
 # Types de régimes de circulation (circ)
@@ -202,8 +202,8 @@ voie_reserv$Freq_Leger <- round(grav_voie_reserv[,4]/apply(grav_voie_reserv,1,su
 voie_reserv$Freq_Hosp <- round(grav_voie_reserv[,3]/apply(grav_voie_reserv,1,sum)*100,2)
 voie_reserv$Freq_Deces <- round(grav_voie_reserv[,2]/apply(grav_voie_reserv,1,sum)*100,2)
 voie_reserv$Type_voie <- str_replace_all(voie_reserv$Type_voie, pattern = c("-1","0","1","2","3"), 
-                                           replacement = c("Non renseigné","Sans objet","Piste cyclable",
-                                                           "Bande cyclable","Voie réservée"))
+                                         replacement = c("Non renseigné","Sans objet","Piste cyclable",
+                                                         "Bande cyclable","Voie réservée"))
 View(voie_reserv)
 
 # Types de profils (prof)
@@ -217,8 +217,8 @@ decliv$Freq_Leger <- round(grav_decliv[,4]/apply(grav_decliv,1,sum)*100,2)
 decliv$Freq_Hosp <- round(grav_decliv[,3]/apply(grav_decliv,1,sum)*100,2)
 decliv$Freq_Deces <- round(grav_decliv[,2]/apply(grav_decliv,1,sum)*100,2)
 decliv$Type_profil <- str_replace_all(decliv$Type_profil, pattern = c("-1","1","2","3","4"), 
-                                         replacement = c("Non renseigné","Plat","Pente",
-                                                         "Sommet de côte","Bas de côte"))
+                                      replacement = c("Non renseigné","Plat","Pente",
+                                                      "Sommet de côte","Bas de côte"))
 View(decliv)
 
 # Types de plan (plan)
@@ -232,8 +232,8 @@ virage$Freq_Leger <- round(grav_virage[,4]/apply(grav_virage,1,sum)*100,2)
 virage$Freq_Hosp <- round(grav_virage[,3]/apply(grav_virage,1,sum)*100,2)
 virage$Freq_Deces <- round(grav_virage[,2]/apply(grav_virage,1,sum)*100,2)
 virage$Type_plan <- str_replace_all(virage$Type_plan, pattern = c("-1","1","2","3","4"), 
-                                      replacement = c("Non renseigné","Rectiligne","Gauche",
-                                                      "Droite","S"))
+                                    replacement = c("Non renseigné","Rectiligne","Gauche",
+                                                    "Droite","S"))
 View(virage)
 
 # Etat de la surface (surf)
@@ -262,9 +262,9 @@ infrastructures$Freq_Leger <- round(grav_infra[,4]/apply(grav_infra,1,sum)*100,2
 infrastructures$Freq_Hosp <- round(grav_infra[,3]/apply(grav_infra,1,sum)*100,2)
 infrastructures$Freq_Deces <- round(grav_infra[,2]/apply(grav_infra,1,sum)*100,2)
 infrastructures$Type_infra <- str_replace_all(infrastructures$Type_infra, pattern = c("-1","0","1","2","3","4","5","6","7","8","9"), 
-                                        replacement = c("Non renseigné","Aucune","Sous terrain ou tunnel","Pont ou autopont",
-                                                        "Bretelle","Voie ferrée","Carrefour aménagé","Zone piétonne",
-                                                        "Zone de péage","Corps gras ou huile","Autres"))
+                                              replacement = c("Non renseigné","Aucune","Sous terrain ou tunnel","Pont ou autopont",
+                                                              "Bretelle","Voie ferrée","Carrefour aménagé","Zone piétonne",
+                                                              "Zone de péage","Corps gras ou huile","Autres"))
 View(infrastructures)
 
 # Infrastructures (situ)
@@ -278,9 +278,9 @@ situation$Freq_Leger <- round(grav_situ[,4]/apply(grav_situ,1,sum)*100,2)
 situation$Freq_Hosp <- round(grav_situ[,3]/apply(grav_situ,1,sum)*100,2)
 situation$Freq_Deces <- round(grav_situ[,2]/apply(grav_situ,1,sum)*100,2)
 situation$Type_situ <- str_replace_all(situation$Type_situ, pattern = c("-1","1","2","3","4","5","6","8"), 
-                                              replacement = c("Non renseigné","Chaussée","Bande arret urgence",
-                                                              "Accotement","Trottoir","Piste cyclable",
-                                                              "Autre voie spéciale","Autres"))
+                                       replacement = c("Non renseigné","Chaussée","Bande arret urgence",
+                                                       "Accotement","Trottoir","Piste cyclable",
+                                                       "Autre voie spéciale","Autres"))
 View(situation)
 
 # Vitesse max autorisée (vma)
@@ -403,3 +403,73 @@ tab_motor<- table(vehic$motor)
 View (tab_motor)
 
 plot(vehic$motor, main = "Nombre de vehicules par type de motorisation du véhicule")
+
+
+#####################################
+str(usagers)
+
+# Gravité de l'accident
+# 1 =  Indemne  
+# 2 = Tué  
+# 3 = Blessé hospitalisé  
+# 4 = Blessé léger
+
+usagers$grav <- factor(usagers$grav, labels = c("Indemne",
+                                                "Tué", "Blessé hospitalisé", 
+                                                "Blessé léger"))
+
+tab_grav <- table(usagers$grav)
+tab_grav
+
+#Catégorie de l'usager
+# 1 = Conducteur
+# 2 = Passager
+# 3 = Piéton
+
+usagers$catu <- factor(usagers$catu, labels = c("Conducteur",
+                                                "Passager", "Piéton"))
+
+tab_catu <- table(usagers$catu)
+tab_catu
+
+
+# Tableau de contingence, Gravité de l'accident vs catégorie de l'usager
+tab_grav_catu <- table(usagers$catu, usagers$grav)
+tab_grav_catu
+
+require("questionr")
+
+# Profils lignes, pour comparer les modalités de la gravité
+profil_ligne <- lprop(tab_grav_catu,digits = 2, percent = TRUE)
+profil_ligne
+
+# Profils colonnes, pour comparer les modalités de la catégorie d'usagers
+profil_colonne <- cprop(tab_grav_catu, digits = 2, percent = TRUE)
+profil_colonne
+
+
+mosaicplot(t(tab_grav_catu), main = "Graphe en mosaïque")
+
+library("ggplot2")
+a <- ggplot(usagers, aes(x = grav, fill = catu)) + 
+  geom_bar(stat="count", position = "dodge") + ylab("fréquence") + 
+  scale_x_discrete("Gravité") +  guides(fill = guide_legend(title = "Catégorie d'usager")) + 
+  theme(legend.position="bottom", plot.title = element_text(face = "bold"))
+a 
+
+b <- ggplot(usagers, aes(x = catu, fill = grav)) + 
+  geom_bar(stat="count", position = "dodge") + ylab("fréquence") +
+  scale_x_discrete("Catégorie d'usager") +  guides(fill = guide_legend(title = "Gravité")) + 
+  theme(legend.position="bottom", plot.title = element_text(face = "bold"))
+b
+
+
+# À reprendre 
+c <- ggplot(usagers, aes(x = grav, fill = catu)) + 
+  geom_bar(mapping = aes(x = grav, y = ..prop.., group = catu), stat = "count", position = "dodge") + 
+  scale_y_continuous(labels = scales::percent_format()) + 
+  ylab("Pourcentage") + 
+  scale_x_discrete("Gravité") +  guides(fill = guide_legend(title = "Catégorie d'usager")) + 
+  theme(legend.position="bottom", plot.title = element_text(face = "bold"))
+c 
+
