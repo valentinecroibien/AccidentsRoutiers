@@ -472,8 +472,8 @@ ggplot(df, aes(x = catu, fill = grav))+
 
 
 # Profils colonnes, pour comparer les modalités de la catégorie d'usagers
-profil_colonne <- cprop(tab_grav_catu, digits = 0, percent = TRUE)
-profil_colonne
+profil_colonne_grav_catu <- cprop(tab_grav_catu, digits = 0, percent = TRUE)
+profil_colonne_grav_catu
 
 ggplot(df, aes(x = grav, fill = catu))+
   geom_bar(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..]), position="dodge" ) +
@@ -528,8 +528,8 @@ ggplot(df, aes(x = trajet, fill = grav)) +
 
 
 # Profils lignes, pour comparer les modalités de la gravité
-profil_ligne <- lprop(tab_grav_trajet, digits = 0, percent = TRUE)
-profil_ligne
+profil_ligne_grav_trajet <- lprop(tab_grav_trajet, digits = 0, percent = TRUE)
+profil_ligne_grav_trajet
 
 ggplot(df, aes(x = trajet, fill = grav))+
   geom_bar(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..]), position="dodge" ) +
@@ -545,8 +545,8 @@ ggplot(df, aes(x = trajet, fill = grav))+
 
 
 # Profils colonnes, pour comparer les modalités de la catégorie d'usagers
-profil_colonne <- cprop(tab_grav_trajet, digits = 0, percent = TRUE)
-profil_colonne
+profil_colonne_grav_trajet <- cprop(tab_grav_trajet, digits = 0, percent = TRUE)
+profil_colonne_grav_trajet
 
 ggplot(df, aes(x = grav, fill = trajet))+
   geom_bar(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..]), position="dodge" ) +
