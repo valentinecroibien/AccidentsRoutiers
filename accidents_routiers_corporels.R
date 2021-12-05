@@ -563,3 +563,137 @@ ggplot(df, aes(x = grav, fill = trajet))+
 
 
 
+
+########## CROISEMENT GRAVITÉ X LIEUX
+
+### catr : catégorie de la route
+
+# recodage des modalités
+df$catr <- factor(df$catr, labels = c("Autoroute","Nationale","Départementale",
+                                      "Voie Communales","Hors réseau public",
+                                      "Parking","Route metropole urbaine","Autre"))
+
+# résumé des modalités
+tab_catr <- table(df$catr)
+tab_catr
+
+# Tableau de contingence catégorie de la route x gravité
+tab_grav_catr <- table(df$catr, df$grav)
+tab_grav_catr
+
+# Représentation graphique des types de routes selon la gravité
+ggplot(df, aes(x = grav, fill = catr)) + 
+  geom_bar(stat="count", position = "dodge") + ylab("Effectif") + 
+  scale_x_discrete("Gravité") +  guides(fill = guide_legend(title = "Catégorie de routes")) + 
+  theme(legend.position="right", plot.title = element_text(face = "bold")) +
+  ggtitle("Effectifs des individus impliqués dans un accident routier\nselon le type de route, regroupement par gravité")
+
+# Représentation graphique de la gravité  selon les types de routes
+ggplot(df, aes(x = catr, fill = grav)) + 
+  geom_bar(stat="count", position = "dodge") + ylab("Effectif") +
+  scale_x_discrete("Catégorie de routes") +  guides(fill = guide_legend(title = "Gravité")) + 
+  theme(legend.position="right", plot.title = element_text(face = "bold")) +
+  ggtitle("Effectifs des individus impliqués dans un accident routier\nselon la gravité, regroupement par type de route")
+
+# Profils lignes, pour comparer les modalités de la gravité
+profil_ligne_grav_catr <- lprop(tab_grav_catr, digits = 0, percent = TRUE)
+profil_ligne_grav_catr
+
+# Représentation graphique des porifls lignes
+ggplot(df, aes(x = catr, fill = grav)) +
+  geom_bar(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..]), position="dodge" ) +
+  geom_text(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..],
+                 label=scales::percent(round(..count../tapply(..count.., ..x.. ,sum)[..x..], 2))),
+            stat="count", position=position_dodge(0.9), vjust=-0.5) +
+  ylab('Pourcentage, %') +
+  scale_y_continuous(labels = scales::percent) +
+  scale_x_discrete("Catégorie de routes") +  
+  guides(fill = guide_legend(title = "Gravité")) + 
+  theme(legend.position="right", plot.title = element_text(face = "bold")) +
+  ggtitle("Diagramme en barres sur les profils lignes,\nregroupement par catégorie de routes")
+
+# Profils colonnes, pour comparer les modalités de la catégorie de routes
+profil_colonne_grav_catr <- cprop(tab_grav_catr, digits = 0, percent = TRUE)
+profil_colonne_grav_catr
+
+# Représentation graphique des porifls lignes
+ggplot(df, aes(x = grav, fill = catr)) +
+  geom_bar(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..]), position="dodge" ) +
+  geom_text(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..],
+                 label=scales::percent(round(..count../tapply(..count.., ..x.. ,sum)[..x..], 2))),
+            stat="count", position=position_dodge(0.9), vjust=-0.5) +
+  ylab('Pourcentage, %') +
+  scale_y_continuous(labels = scales::percent) +
+  scale_x_discrete("Catégorie de routes") +  
+  guides(fill = guide_legend(title = "Gravité")) + 
+  theme(legend.position="right", plot.title = element_text(face = "bold")) +
+  ggtitle("Diagramme en barres sur les profils colonnes,\nregroupement par gravité")
+
+
+
+### surf : état de la surface
+
+# recodage des modalités
+df$surf <- factor(df$surf, labels = c("Normale","Mouillée","Flaques","Inondée","Enneigée",
+                                      "Boue","Verglacée","Corps gras ou huile","Autre"))
+
+# résumé des modalités
+tab_surf <- table(df$surf)
+tab_surf
+
+# Tableau de contingence catégorie de la route x gravité
+tab_grav_surf <- table(df$surf, df$grav)
+tab_grav_surf
+
+# Représentation graphique des types de routes selon la gravité
+ggplot(df, aes(x = grav, fill = surf)) + 
+  geom_bar(stat="count", position = "dodge") + ylab("Effectif") + 
+  scale_x_discrete("Gravité") +  guides(fill = guide_legend(title = "Catégorie de routes")) + 
+  theme(legend.position="right", plot.title = element_text(face = "bold")) +
+  ggtitle("Effectifs des individus impliqués dans un accident routier\nselon le a surface, regroupement par gravité")
+
+# Représentation graphique de la gravité  selon les types de routes
+ggplot(df, aes(x = catr, fill = surf)) + 
+  geom_bar(stat="count", position = "dodge") + ylab("Effectif") +
+  scale_x_discrete("Catégorie de routes") +  guides(fill = guide_legend(title = "Gravité")) + 
+  theme(legend.position="right", plot.title = element_text(face = "bold")) +
+  ggtitle("Effectifs des individus impliqués dans un accident routier\nselon la gravité, regroupement par surface")
+
+# Profils lignes, pour comparer les modalités de la gravité
+profil_ligne_grav_surf <- lprop(tab_grav_surf, digits = 0, percent = TRUE)
+profil_ligne_grav_surf
+
+# Représentation graphique des porifls lignes
+ggplot(df, aes(x = surf, fill = grav)) +
+  geom_bar(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..]), position="dodge" ) +
+  geom_text(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..],
+                 label=scales::percent(round(..count../tapply(..count.., ..x.. ,sum)[..x..], 2))),
+            stat="count", position=position_dodge(0.9), vjust=-0.5) +
+  ylab('Pourcentage, %') +
+  scale_y_continuous(labels = scales::percent) +
+  scale_x_discrete("Catégorie de routes") +  
+  guides(fill = guide_legend(title = "Gravité")) + 
+  theme(legend.position="right", plot.title = element_text(face = "bold")) +
+  ggtitle("Diagramme en barres sur les profils lignes,\nregroupement par surface")
+
+# Profils colonnes, pour comparer les modalités de la catégorie de routes
+profil_colonne_grav_surf <- cprop(tab_grav_surf, digits = 0, percent = TRUE)
+profil_colonne_grav_surf
+
+# Représentation graphique des porifls lignes
+ggplot(df, aes(x = grav, fill = surf)) +
+  geom_bar(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..]), position="dodge" ) +
+  geom_text(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..],
+                 label=scales::percent(round(..count../tapply(..count.., ..x.. ,sum)[..x..], 2))),
+            stat="count", position=position_dodge(0.9), vjust=-0.5) +
+  ylab('Pourcentage, %') +
+  scale_y_continuous(labels = scales::percent) +
+  scale_x_discrete("Catégorie de routes") +  
+  guides(fill = guide_legend(title = "Gravité")) + 
+  theme(legend.position="right", plot.title = element_text(face = "bold")) +
+  ggtitle("Diagramme en barres sur les profils colonnes,\nregroupement par gravité")
+
+
+
+
+
