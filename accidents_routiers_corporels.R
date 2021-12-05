@@ -616,7 +616,7 @@ ggplot(df, aes(x = catr, fill = grav)) +
 profil_colonne_grav_catr <- cprop(tab_grav_catr, digits = 0, percent = TRUE)
 profil_colonne_grav_catr
 
-# Représentation graphique des porifls lignes
+# Représentation graphique des profils colonnes
 ggplot(df, aes(x = grav, fill = catr)) +
   geom_bar(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..]), position="dodge" ) +
   geom_text(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..],
@@ -624,8 +624,8 @@ ggplot(df, aes(x = grav, fill = catr)) +
             stat="count", position=position_dodge(0.9), vjust=-0.5) +
   ylab('Pourcentage, %') +
   scale_y_continuous(labels = scales::percent) +
-  scale_x_discrete("Catégorie de routes") +  
-  guides(fill = guide_legend(title = "Gravité")) + 
+  scale_x_discrete("Gravité") +  
+  guides(fill = guide_legend(title = "Catégorie de routes")) + 
   theme(legend.position="right", plot.title = element_text(face = "bold")) +
   ggtitle("Diagramme en barres sur les profils colonnes,\nregroupement par gravité")
 
@@ -663,7 +663,7 @@ ggplot(df, aes(x = catr, fill = surf)) +
 profil_ligne_grav_surf <- lprop(tab_grav_surf, digits = 0, percent = TRUE)
 profil_ligne_grav_surf
 
-# Représentation graphique des porifls lignes
+# Représentation graphique des profils lignes
 ggplot(df, aes(x = surf, fill = grav)) +
   geom_bar(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..]), position="dodge" ) +
   geom_text(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..],
@@ -671,7 +671,7 @@ ggplot(df, aes(x = surf, fill = grav)) +
             stat="count", position=position_dodge(0.9), vjust=-0.5) +
   ylab('Pourcentage, %') +
   scale_y_continuous(labels = scales::percent) +
-  scale_x_discrete("Catégorie de routes") +  
+  scale_x_discrete("État de la surface") +  
   guides(fill = guide_legend(title = "Gravité")) + 
   theme(legend.position="right", plot.title = element_text(face = "bold")) +
   ggtitle("Diagramme en barres sur les profils lignes,\nregroupement par surface")
@@ -680,7 +680,7 @@ ggplot(df, aes(x = surf, fill = grav)) +
 profil_colonne_grav_surf <- cprop(tab_grav_surf, digits = 0, percent = TRUE)
 profil_colonne_grav_surf
 
-# Représentation graphique des porifls lignes
+# Représentation graphique des profils colonnes
 ggplot(df, aes(x = grav, fill = surf)) +
   geom_bar(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..]), position="dodge" ) +
   geom_text(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..],
@@ -688,8 +688,8 @@ ggplot(df, aes(x = grav, fill = surf)) +
             stat="count", position=position_dodge(0.9), vjust=-0.5) +
   ylab('Pourcentage, %') +
   scale_y_continuous(labels = scales::percent) +
-  scale_x_discrete("Catégorie de routes") +  
-  guides(fill = guide_legend(title = "Gravité")) + 
+  scale_x_discrete("Gravité") +  
+  guides(fill = guide_legend(title = "État de la surface")) + 
   theme(legend.position="right", plot.title = element_text(face = "bold")) +
   ggtitle("Diagramme en barres sur les profils colonnes,\nregroupement par gravité")
 
@@ -751,7 +751,9 @@ ggplot(df, aes(x = atm, fill = grav))+
 profil_colonne_grav_atm <- cprop(tab_atm_grave, digits = 0, percent = TRUE)
 profil_colonne_grav_atm
 
-ggplot(df, aes(x = grav, fill = atm))+
+cond_meteo <- which(df$atm %in%c("Neige - grêle","Brouillard - fumée","Vent fort - tempête"))
+
+ggplot(df[- cond_meteo,], aes(x = grav, fill = atm))+
   geom_bar(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..]), position="dodge") +
   geom_text(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..], 
                  label=scales::percent(round(..count../tapply(..count.., ..x.. ,sum)[..x..], 2))),
