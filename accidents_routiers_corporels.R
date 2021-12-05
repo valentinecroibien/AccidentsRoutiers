@@ -784,12 +784,6 @@ df$catv=factor(df$catv, labels = c("Indéterminable","Bicyclette","Cyclomoteur<5
                                    "VAE","Autre véhicule"))
 
 
-df$grav <- factor(df$grav, labels = c("Indemne",
-                                      "Tués", "Blessés hospitalisés", 
-                                      "Blessés légers"))
-
-table_grav <- table(df$grav)
-
 table_catv<-table(df$catv)
 
 table_catv_grave<-table(df$grav,df$catv)
@@ -814,8 +808,8 @@ b
 
 library('questionr')
 # Profils lignes, pour comparer les modalitÃ©s de la gravitÃ©
-profil_ligne <- lprop(table_catv_grave, digits = 0, percent = TRUE)
-profil_ligne
+profil_ligne_grav_catv <- lprop(table_catv_grave, digits = 0, percent = TRUE)
+profil_ligne_grav_catv
 
 
 ggplot(df, aes(x = catv, fill = grav))+
@@ -832,8 +826,8 @@ ggplot(df, aes(x = catv, fill = grav))+
 
 
 # Profils colonnes, pour comparer les modalitÃ©s de la catÃ©gorie d'usagers
-profil_colonne <- cprop(table_catv_grave, digits = 0, percent = TRUE)
-profil_colonne
+profil_colonne_grav_catv <- cprop(table_catv_grave, digits = 0, percent = TRUE)
+profil_colonne_grav_catv
 
 ggplot(df, aes(x = grav, fill = catv))+
   geom_bar(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..]), position="dodge") +
