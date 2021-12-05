@@ -116,10 +116,10 @@ usagers$trajet <- as.factor(usagers$trajet)
 ### Valeurs manquantes et abérrantes
 
 ## Base caracteristiques
-which(carac$atm==-1)
-which(carac$col==-1)
-which(carac$adr==NaN | carac$adr=="-")
-carac<-carac[-c(2247,5578,5782,6796,52842),]
+va <- which(carac$atm==-1)
+va2 <- which(carac$col==-1)
+va3 <-which(is.nan(carac$adr) | carac$adr=="-")
+carac<-carac[-c(va, va2, va3),]
 
 ## Base lieux
 lieux$surf <- str_replace_all(lieux$surf, pattern = "-1", 
@@ -132,12 +132,14 @@ carac_lieux <- inner_join(carac,lieux,by="Num_Acc")
 lieux_usagers <- inner_join(lieux,usagers,by="Num_Acc")
 usagers_vehic <- inner_join(usagers,vehic,by="id_vehicule")
 colnames(usagers_vehic)[1] <- "Num_Acc"
-var_usagers_vehic <- c("id_vehicule","catv","obs","obsm","manv","motor")
-usagers_vehic <- usagers_vehic[,var_vehic]
+
+var_usagers_vehic <- c("Num_Acc","id_vehicule","grav","catu","sexe","trajet","catv","obs","obsm","manv","motor")
+usagers_vehic <- usagers_vehic[,var_usagers_vehic]
+
 df <- inner_join(carac_lieux,usagers_vehic,by="Num_Acc")
 
-
-
+str(df)
+View(df)
 
 
 ########## STATISTIQUES DESCRIPTIVES
