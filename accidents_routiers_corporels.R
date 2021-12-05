@@ -437,39 +437,67 @@ tab_catu
 tab_grav_catu <- table(usagers$catu, usagers$grav)
 tab_grav_catu
 
-require("questionr")
-
-# Profils lignes, pour comparer les modalités de la gravité
-profil_ligne <- lprop(tab_grav_catu,digits = 2, percent = TRUE)
-profil_ligne
-
-# Profils colonnes, pour comparer les modalités de la catégorie d'usagers
-profil_colonne <- cprop(tab_grav_catu, digits = 2, percent = TRUE)
-profil_colonne
-
-
-mosaicplot(t(tab_grav_catu), main = "Graphe en mosaïque")
-
 library("ggplot2")
 a <- ggplot(usagers, aes(x = grav, fill = catu)) + 
-  geom_bar(stat="count", position = "dodge") + ylab("fréquence") + 
-  scale_x_discrete("Gravité") +  guides(fill = guide_legend(title = "Catégorie d'usager")) + 
-  theme(legend.position="bottom", plot.title = element_text(face = "bold"))
+  geom_bar(stat="count", position = "dodge") + ylab("Effectif") + 
+  scale_x_discrete("Gravité") +  guides(fill = guide_legend(title = "Catégorie d'usagers")) + 
+  theme(legend.position="right", plot.title = element_text(face = "bold")) +
+  ggtitle("Effectifs des usagers, \nregroupement par gravité")
 a 
 
 b <- ggplot(usagers, aes(x = catu, fill = grav)) + 
-  geom_bar(stat="count", position = "dodge") + ylab("fréquence") +
-  scale_x_discrete("Catégorie d'usager") +  guides(fill = guide_legend(title = "Gravité")) + 
-  theme(legend.position="bottom", plot.title = element_text(face = "bold"))
+  geom_bar(stat="count", position = "dodge") + ylab("Effectif") +
+  scale_x_discrete("Catégorie d'usagers") +  guides(fill = guide_legend(title = "Gravité")) + 
+  theme(legend.position="right", plot.title = element_text(face = "bold")) +
+  ggtitle("Effectifs des usagers, \nregroupement par catégorie d'usagers")
 b
 
 
-# À reprendre 
-c <- ggplot(usagers, aes(x = grav, fill = catu)) + 
-  geom_bar(mapping = aes(x = grav, y = ..prop.., group = catu), stat = "count", position = "dodge") + 
-  scale_y_continuous(labels = scales::percent_format()) + 
-  ylab("Pourcentage") + 
-  scale_x_discrete("Gravité") +  guides(fill = guide_legend(title = "Catégorie d'usager")) + 
-  theme(legend.position="bottom", plot.title = element_text(face = "bold"))
-c 
+# Profils lignes, pour comparer les modalités de la gravité
+profil_ligne <- lprop(tab_grav_catu, digits = 0, percent = TRUE)
+profil_ligne
+
+ggplot(usagers, aes(x = catu, fill = grav))+
+  geom_bar(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..]), position="dodge" ) +
+  geom_text(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..], label=scales::percent(..count../tapply(..count.., ..x.. ,sum)[..x..]) ),
+            stat="count", position=position_dodge(0.9), vjust=-0.5)+
+  ylab('Pourcentage, %') +
+  scale_y_continuous(labels = scales::percent) +
+  scale_x_discrete("Catégorie d'usagers") +  
+  guides(fill = guide_legend(title = "Gravité")) + 
+  theme(legend.position="right", plot.title = element_text(face = "bold")) +
+  ggtitle("Graphiques à bâtons sur les profils lignes, regroupement par catégorie d'usagers")
+
+
+# Profils colonnes, pour comparer les modalités de la catégorie d'usagers
+profil_colonne <- cprop(tab_grav_catu, digits = 0, percent = TRUE)
+profil_colonne
+
+ggplot(usagers, aes(x = grav, fill = catu))+
+  geom_bar(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..]), position="dodge" ) +
+  geom_text(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..], label=scales::percent(..count../tapply(..count.., ..x.. ,sum)[..x..]) ),
+            stat="count", position=position_dodge(0.9), vjust=-0.5)+
+  ylab('Pourcentage, %') +
+  scale_y_continuous(labels = scales::percent) +
+  scale_x_discrete("Gravité") +  
+  guides(fill = guide_legend(title = "Catégorie d'usagers")) + 
+  theme(legend.position="right", plot.title = element_text(face = "bold")) +
+  ggtitle("Graphiques à bâtons sur les profils colonnes, regroupement par gravité")
+
+
+# c <- ggplot(usagers) +
+#   geom_bar(mapping = aes(x = grav, y = ..prop.., group = catu), stat = "count") +
+#   facet_grid(~ catu) +
+#   scale_y_continuous(labels = scales::percent_format()) + 
+#   ylab("Pourcentage") + 
+#   scale_x_discrete("Gravité")
+# c
+# 
+# d <- ggplot(usagers) +
+#   geom_bar(mapping = aes(x = catu, y = ..prop.., group = grav), stat = "count") +
+#   facet_grid(~ grav) +
+#   scale_y_continuous(labels = scales::percent_format()) + 
+#   ylab("Pourcentage") + 
+#   scale_x_discrete("Catégorie d'usager")
+# d
 
