@@ -694,6 +694,74 @@ ggplot(df, aes(x = grav, fill = surf)) +
   ggtitle("Diagramme en barres sur les profils colonnes,\nregroupement par gravité")
 
 
+# croisement gravité, données météo
+# catégories en météo (colonne atm):
+# -1 – Non renseigné      1 – Normale      2 – Pluie légère
+#3 – Pluie forte  4 – Neige - grêle    5– Brouillard - fumée
+#6 – Vent fort - tempête    7 – Temps éblouissant   8 – Temps couvert
+#9 – Autre"
+
+df$atm=factor(df$atm, labels = c("Normale","Pluie légère",
+                                 "Pluie forte","Neige - grêle","Brouillard - fumée",
+                                 "Vent fort - tempête","Temps éblouissant","Temps couvert",
+                                 "Autre"))
+
+
+tab_atm<-table(df$atm)
+tab_atm
+
+tab_atm_grave<-table(df$grav,df$atm)
+tab_atm_grave
+
+
+
+ggplot(df, aes(x = grav, fill = atm)) + 
+  geom_bar(stat="count", position = "dodge") + ylab("Effectif") + 
+  scale_x_discrete("Gravité") +  guides(fill = guide_legend(title = "Conditions météo")) + 
+  theme(legend.position="right", plot.title = element_text(face = "bold")) +
+  ggtitle("Effectifs des usagers, \nregroupement par gravité")
+
+
+ggplot(df, aes(x = atm, fill = grav)) + 
+  geom_bar(stat="count", position = "dodge") + ylab("Effectif") +
+  scale_x_discrete("Conditions météo") +  guides(fill = guide_legend(title = "Gravité")) + 
+  theme(legend.position="right", plot.title = element_text(face = "bold")) +
+  ggtitle("Effectifs des usagers, \nregroupement par conditions météo de l'accident")
+
+
+# Profils lignes, pour comparer les modalités de la gravité
+profil_ligne_grav_atm <- lprop(tab_atm_grave, digits = 0, percent = TRUE)
+profil_ligne_grav_atm
+
+
+ggplot(df, aes(x = atm, fill = grav))+
+  geom_bar(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..]), position="dodge" ) +
+  geom_text(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..],
+                 label=scales::percent(round(..count../tapply(..count.., ..x.. ,sum)[..x..], 2))),
+            stat="count", position=position_dodge(0.9), vjust=-0.5)+
+  xlab('Condition météo')+
+  ylab('Pourcentage, %') +
+  scale_y_continuous(labels = scales::percent) +
+  guides(fill = guide_legend(title = "Gravité")) + 
+  theme(legend.position="right", plot.title = element_text(face = "bold")) +
+  ggtitle("Graphiques à bâtons sur les profils lignes, regroupement par conditions météo")
+
+
+# Profils colonnes, pour comparer les modalités de la catégorie d'usagers
+profil_colonne_grav_atm <- cprop(tab_atm_grave, digits = 0, percent = TRUE)
+profil_colonne_grav_atm
+
+ggplot(df, aes(x = grav, fill = atm))+
+  geom_bar(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..]), position="dodge") +
+  geom_text(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..], 
+                 label=scales::percent(round(..count../tapply(..count.., ..x.. ,sum)[..x..], 2))),
+            stat="count", position=position_dodge(0.9), vjust=-0.5)+
+  xlab('Gravité')+
+  ylab('Pourcentage, %') +
+  scale_y_continuous(labels = scales::percent) +
+  guides(fill = guide_legend(title = "Conditions météo")) + 
+  theme(legend.position="right", plot.title = element_text(face = "bold")) +
+  ggtitle("Graphiques à bâtons sur les profils colonnes, regroupement par gravité")
 
 
 
