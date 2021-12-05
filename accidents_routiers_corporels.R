@@ -763,5 +763,89 @@ ggplot(df, aes(x = grav, fill = atm))+
   theme(legend.position="right", plot.title = element_text(face = "bold")) +
   ggtitle("Graphiques à bâtons sur les profils colonnes, regroupement par gravité")
 
+############GRAVITE DE L'ACCIDENT BASE VEHICULES
+# Croisement gravité, catégorie du véhicule
+# Catégorie du véhicule (colonne catv)
+df$catv=factor(df$catv, labels = c("Indéterminable","Bicyclette","Cyclomoteur<50cm3","Voiturette",
+                                   "VL Seul",
+                                   "VU seul 1,5T <= PTAC <= 3,5T avec ou sans remorque",
+                                   "PL seul 3,5T <PTCA <= 7,5T"," PL seul > 7,5T",
+                                   " PL > 3,5T + remorque",
+                                   "Tracteur routier seul","Tracteur routier + semi-remorque ",
+                                   "Engin spécial","Tracteur agricole",
+                                   "Scooter < 50 cm3 ","– Motocyclette > 50 cm3 et <= 125 cm3",
+                                   " Scooter > 50 cm3 et <= 125 cm3 ","Motocyclette > 125 cm3 ",
+                                   "Scooter > 125 cm3 ",
+                                   " Quad léger <= 50 cm3 ","– Quad lourd > 50 cm3","Autobus",
+                                   "Autocar","Train","Tramway","3RM <= 50 cm3 ","3RM > 50 cm3 <= 125 cm3",
+                                   " 3RM > 125 cm3 ","EDP à moteur","EDP sans moteur",
+                                   "VAE","Autre véhicule"))
+
+
+df$grav <- factor(df$grav, labels = c("Indemne",
+                                      "Tués", "Blessés hospitalisés", 
+                                      "Blessés légers"))
+
+table_grav <- table(df$grav)
+
+table_catv<-table(df$catv)
+
+table_catv_grave<-table(df$grav,df$catv)
+table_catv
+table_grav
+View(table_catv_grave)
+
+library("ggplot2")
+a <- ggplot(df, aes(x = grav, fill = catv)) + 
+  geom_bar(stat="count", position = "dodge") + ylab("Effectif") + 
+  scale_x_discrete("Gravité") +  guides(fill = guide_legend(title = "Caractéristiques des véhicules")) + 
+  theme(legend.position="right", plot.title = element_text(face = "bold")) +
+  ggtitle("Caractéristiques des véhicules regroupés selon la gravité")
+a 
+
+b <- ggplot(df, aes(x = catv, fill = grav)) + 
+  geom_bar(stat="count", position = "dodge") + ylab("Effectif") +
+  scale_x_discrete("Caractéristiques des véhicules") +  guides(fill = guide_legend(title = "Gravité")) + 
+  theme(legend.position="right", plot.title = element_text(face = "bold")) +
+  ggtitle("Caractéristiques des véhicules regroupés selon la gravité")
+b
+
+library('questionr')
+# Profils lignes, pour comparer les modalitÃ©s de la gravitÃ©
+profil_ligne <- lprop(table_catv_grave, digits = 0, percent = TRUE)
+profil_ligne
+
+
+ggplot(df, aes(x = catv, fill = grav))+
+  geom_bar(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..]), position="dodge" ) +
+  geom_text(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..],
+                 label=scales::percent(round(..count../tapply(..count.., ..x.. ,sum)[..x..], 2))),
+            stat="count", position=position_dodge(0.9), vjust=-0.5)+
+  xlab('Caractéristiques des véhicules')+
+  ylab('Pourcentage, %') +
+  scale_y_continuous(labels = scales::percent) +
+  guides(fill = guide_legend(title = "Gravité")) + 
+  theme(legend.position="right", plot.title = element_text(face = "bold")) +
+  ggtitle("Graphiques à batons sur les profils lignes, regroupement par caractéristiques de véhicules")
+
+
+# Profils colonnes, pour comparer les modalitÃ©s de la catÃ©gorie d'usagers
+profil_colonne <- cprop(table_catv_grave, digits = 0, percent = TRUE)
+profil_colonne
+
+ggplot(df, aes(x = grav, fill = catv))+
+  geom_bar(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..]), position="dodge") +
+  geom_text(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..], 
+                 label=scales::percent(round(..count../tapply(..count.., ..x.. ,sum)[..x..], 2))),
+            stat="count", position=position_dodge(0.9), vjust=-0.5)+
+  xlab('GravitÃ©')+
+  ylab('Pourcentage, %') +
+  scale_y_continuous(labels = scales::percent) +
+  guides(fill = guide_legend(title = "Caractéristiques des véhicules")) + 
+  theme(legend.position="right", plot.title = element_text(face = "bold")) +
+  ggtitle("Graphiques à bâtons sur les profils colonnes, regroupement par gravité")
+
+
+
 
 
