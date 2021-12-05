@@ -4,7 +4,6 @@ rm(list = ls())
 # bibliotheques
 library('dplyr')
 library('stringr')
-install.packages('kableExtra')
 library('kableExtra')
 
 
@@ -408,7 +407,7 @@ plot(vehic$motor, main = "Nombre de vehicules par type de motorisation du véhic
 
 
 #####################################
-str(usagers)
+str(df)
 
 # Gravité de l'accident
 # 1 =  Indemne  
@@ -416,11 +415,11 @@ str(usagers)
 # 3 = Blessé hospitalisé  
 # 4 = Blessé léger
 
-usagers$grav <- factor(usagers$grav, labels = c("Indemne",
+df$grav <- factor(df$grav, labels = c("Indemne",
                                                 "Tué", "Blessé hospitalisé", 
                                                 "Blessé léger"))
 
-tab_grav <- table(usagers$grav)
+tab_grav <- table(df$grav)
 tab_grav
 
 #Catégorie de l'usager
@@ -428,40 +427,41 @@ tab_grav
 # 2 = Passager
 # 3 = Piéton
 
-usagers$catu <- factor(usagers$catu, labels = c("Conducteur",
+df$catu <- factor(df$catu, labels = c("Conducteur",
                                                 "Passager", "Piéton"))
 
-tab_catu <- table(usagers$catu)
+tab_catu <- table(df$catu)
 tab_catu
 
 
 # Tableau de contingence, Gravité de l'accident vs catégorie de l'usager
-tab_grav_catu <- table(usagers$catu, usagers$grav)
+tab_grav_catu <- table(df$catu, df$grav)
 tab_grav_catu
 
 library("ggplot2")
-a <- ggplot(usagers, aes(x = grav, fill = catu)) + 
+ggplot(df, aes(x = grav, fill = catu)) + 
   geom_bar(stat="count", position = "dodge") + ylab("Effectif") + 
   scale_x_discrete("Gravité") +  guides(fill = guide_legend(title = "Catégorie d'usagers")) + 
   theme(legend.position="right", plot.title = element_text(face = "bold")) +
   ggtitle("Effectifs des usagers, \nregroupement par gravité")
-a 
 
-b <- ggplot(usagers, aes(x = catu, fill = grav)) + 
+ggplot(df, aes(x = catu, fill = grav)) + 
   geom_bar(stat="count", position = "dodge") + ylab("Effectif") +
   scale_x_discrete("Catégorie d'usagers") +  guides(fill = guide_legend(title = "Gravité")) + 
   theme(legend.position="right", plot.title = element_text(face = "bold")) +
   ggtitle("Effectifs des usagers, \nregroupement par catégorie d'usagers")
-b
 
 
+
+library("questionr")
 # Profils lignes, pour comparer les modalités de la gravité
-profil_ligne <- lprop(tab_grav_catu, digits = 0, percent = TRUE)
-profil_ligne
+profil_ligne_grav_catu <- lprop(tab_grav_catu, digits = 0, percent = TRUE)
+profil_ligne_grav_catu
 
-ggplot(usagers, aes(x = catu, fill = grav))+
+ggplot(df, aes(x = catu, fill = grav))+
   geom_bar(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..]), position="dodge" ) +
-  geom_text(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..], label=scales::percent(..count../tapply(..count.., ..x.. ,sum)[..x..]) ),
+  geom_text(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..],
+                 label=scales::percent(round(..count../tapply(..count.., ..x.. ,sum)[..x..], 2))),
             stat="count", position=position_dodge(0.9), vjust=-0.5)+
   ylab('Pourcentage, %') +
   scale_y_continuous(labels = scales::percent) +
@@ -475,9 +475,10 @@ ggplot(usagers, aes(x = catu, fill = grav))+
 profil_colonne <- cprop(tab_grav_catu, digits = 0, percent = TRUE)
 profil_colonne
 
-ggplot(usagers, aes(x = grav, fill = catu))+
+ggplot(df, aes(x = grav, fill = catu))+
   geom_bar(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..]), position="dodge" ) +
-  geom_text(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..], label=scales::percent(..count../tapply(..count.., ..x.. ,sum)[..x..]) ),
+  geom_text(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..], 
+                 label=scales::percent(round(..count../tapply(..count.., ..x.. ,sum)[..x..], 2))),
             stat="count", position=position_dodge(0.9), vjust=-0.5)+
   ylab('Pourcentage, %') +
   scale_y_continuous(labels = scales::percent) +
@@ -487,19 +488,78 @@ ggplot(usagers, aes(x = grav, fill = catu))+
   ggtitle("Graphiques à bâtons sur les profils colonnes, regroupement par gravité")
 
 
-# c <- ggplot(usagers) +
-#   geom_bar(mapping = aes(x = grav, y = ..prop.., group = catu), stat = "count") +
-#   facet_grid(~ catu) +
-#   scale_y_continuous(labels = scales::percent_format()) + 
-#   ylab("Pourcentage") + 
-#   scale_x_discrete("Gravité")
-# c
-# 
-# d <- ggplot(usagers) +
-#   geom_bar(mapping = aes(x = catu, y = ..prop.., group = grav), stat = "count") +
-#   facet_grid(~ grav) +
-#   scale_y_continuous(labels = scales::percent_format()) + 
-#   ylab("Pourcentage") + 
-#   scale_x_discrete("Catégorie d'usager")
-# d
+# Trajet : Motif du déplacement au moment de l’accident  
+# -1 – Non renseigné   
+# 0 – Non renseigné  
+# 1 – Domicile – travail  
+# 2 – Domicile – école  
+# 3 – Courses – achats  
+# 4 – Utilisation professionnelle  
+# 5 – Promenade – loisirs  
+# 9 – Autre 
+
+df$trajet <- factor(df$trajet, labels = c("Non renseigné",
+                                                "Non renseigné", "Domicile - Travail", 
+                                                "Domicile - École",
+                                                "Courses - Achats",
+                                                "Utilisation professionnnelle",
+                                                "Promenade - Loisirs",
+                                                "Autre"))
+
+tab_trajet <- table(df$trajet)
+tab_trajet
+
+# Tableau de contingence, Gravité de l'accident vs trajet effectué
+tab_grav_trajet<- table(df$trajet, df$grav)
+tab_grav_trajet
+
+ggplot(df, aes(x = grav, fill = trajet)) + 
+  geom_bar(stat="count", position = "dodge") + ylab("Effectif") + 
+  scale_x_discrete("Gravité") +  guides(fill = guide_legend(title = "Trajet")) + 
+  theme(legend.position="right", plot.title = element_text(face = "bold")) +
+  ggtitle("Effectifs des usagers, \nregroupement par gravité")
+
+ggplot(df, aes(x = trajet, fill = grav)) + 
+  geom_bar(stat="count", position = "dodge") + ylab("Effectif") +
+  scale_x_discrete("Trajet") +  guides(fill = guide_legend(title = "Gravité")) + 
+  theme(legend.position="right", plot.title = element_text(face = "bold")) +
+  ggtitle("Effectifs des usagers, \nregroupement par type de trajet")
+
+
+
+# Profils lignes, pour comparer les modalités de la gravité
+profil_ligne <- lprop(tab_grav_trajet, digits = 0, percent = TRUE)
+profil_ligne
+
+ggplot(df, aes(x = trajet, fill = grav))+
+  geom_bar(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..]), position="dodge" ) +
+  geom_text(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..],
+                 label=scales::percent(round(..count../tapply(..count.., ..x.. ,sum)[..x..], 2))),
+            stat="count", position=position_dodge(0.9), vjust=-0.5)+
+  ylab('Pourcentage, %') +
+  scale_y_continuous(labels = scales::percent) +
+  scale_x_discrete("Type de trajet") +  
+  guides(fill = guide_legend(title = "Gravité")) + 
+  theme(legend.position="right", plot.title = element_text(face = "bold")) +
+  ggtitle("Graphiques à bâtons sur les profils lignes, regroupement par type de trajet")
+
+
+# Profils colonnes, pour comparer les modalités de la catégorie d'usagers
+profil_colonne <- cprop(tab_grav_trajet, digits = 0, percent = TRUE)
+profil_colonne
+
+ggplot(df, aes(x = grav, fill = trajet))+
+  geom_bar(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..]), position="dodge" ) +
+  geom_text(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..], 
+                 label=scales::percent(round(..count../tapply(..count.., ..x.. ,sum)[..x..], 2))),
+            stat="count", position=position_dodge(0.9), vjust=-0.5)+
+  ylab('Pourcentage, %') +
+  scale_y_continuous(labels = scales::percent) +
+  scale_x_discrete("Gravité") +  
+  guides(fill = guide_legend(title = "Type de trajet")) + 
+  theme(legend.position="right", plot.title = element_text(face = "bold")) +
+  ggtitle("Graphiques à bâtons sur les profils colonnes, regroupement par gravité")
+
+
+
 
