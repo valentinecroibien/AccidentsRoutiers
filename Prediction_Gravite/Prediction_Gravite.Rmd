@@ -35,7 +35,7 @@ toc_depth : 3
 #Ce bloc configure quelques options d'affichage pour les blocs R
 library('knitr')
 opts_chunk$set(comment = '', echo = FALSE,  tidy = TRUE, 
-               fig.pos = 'ht!', fig.align='center', fig.width = 7)
+               fig.pos = 'ht!', fig.align='center', fig.asp = 0.8)
 ```
 
 ```{r, message = FALSE}
@@ -46,6 +46,10 @@ library('ggplot2')
 library('kableExtra')
 library('lubridate')
 library("questionr")
+library("tidyverse")
+library("questionr")
+library("FactoMineR")
+library("factoextra")
 ```
 
 ```{r}
@@ -183,23 +187,64 @@ df <- inner_join(carac_lieux,usagers_vehic,by="Num_Acc")
 \newpage
 # Introduction  
 
-  Enjeux majeurs des décisions politiques, les problèmes liés à la sécurité routière sont au cœur de tous les débats depuis maintenant quatre décennies.
+|           Enjeux majeurs des décisions politiques, les problèmes liés à la sécurité routière sont au cœur de tous les débats depuis maintenant quatre décennies.
 Grâce aux innovations dans la conception et l’utilisation des voitures[^1], couplées à de nombreuses mesures de sécurité[^2], d’incontestables résultats ont été obtenus pour limiter le nombre et l’impact des accidents routiers dans notre vie quotidienne. Ainsi, par exemple, le nombre de tués sur la route est passé de 12510 en 1980 à 3480 en 2019[^3]. Toutefois, ces mesures montrent leur limite en termes d’efficacité : le nombre de tués se stabilise par exemple autour de 3400/3500.  
 
-# Études des accidents corporels routiers de 2019 en France  
-Dans un premier temps, nous avons étudié la répartition des usagers impliqués dans un accident selon la gravité. Cette répartition est illustrée dans la table \@ref(tab:table_grav).  
+|           Notre étude porte sur les facteurs influençant la gravité des accidents corporels routiers. Nous allons essayer d'élaborer un modèle permettant de prédire la gravité d'un accident. 
+Pour cela, nous avons choisi un ensemble de base de données issues du site [DataGouv](https://www.data.gouv.fr/fr/datasets/bases-de-donnees-annuelles-des-accidents-corporels-de-la-circulation-routiere-annees-de-2005-a-2019/) sur les accidents corporels de la circulation routière de 2019. Les données utilisées sont présentées en annexe \@ref(jeux-donnees).  
 
-Ensuite, nous avons étudié la répartition des usagers selon la gravité croisée avec d'autres variables telles que la catégorie de l'usager, le type de trajet effectué, l'état de la surface, les conditions atmosphériques, etc.  
-
-La répartition des individus selon la gravité et leur catégorie est disponible dans la figure \@ref(fig:dotplotex).  
-
-
-
-# Prédiction de la gravité des accidents corporels routiers  
+|           Dans un premier temps, nous allons donc vous présenter une étude statistique des accidents corporels routiers en 2019, puis nous tenterons de mettre en place un modèle de prédiction de notre variable gravité.  
 
 [^1]: On citera la ceinture de sécurité, les airbags, les renforts latéraux parmi tant d’autres.
 [^2]: On citera l’abaissement drastique du taux d’alcoolémie, l’instauration du permis à points, l’alourdissement du régime des contraventions, la politique de généralisations des radars et l’abaissement de la vitesse de 90 à 80km/h sur le réseau secondaire.
 [^3]: [Statistiques de la sécurité routière](http://www.securite-routiere.org/Fiches/statistiques/statfr.htm)
+
+
+# Études des accidents corporels routiers de 2019 en France  
+|           Dans un premier temps, nous avons étudié la répartition des usagers impliqués dans un accident corporel routier en 2019. Nous avons tout d'abord, étudié la répartition des usagers selon la gravité. Cette répartition est illustrée dans la table \@ref(tab:tablegrav). Ensuite, nous avons étudié la répartition des usagers selon leur catégorie d'usagers. Cette répartition est illustrée dnas la table \@ref(tab:tablecatu). Puis nous avons étudié la répartition des accidents sur l'année 2019. Cette répartition est visible dans la figure ci-dessous :  
+
+```{r}
+df %>%
+  group_by(date)%>%
+  summarize(nb_accidents=n_distinct(Num_Acc))%>%
+  mutate(nom_jour=wday(date,label=TRUE,week_start=1,abbr=FALSE,locale=Sys.getlocale("LC_TIME")),
+         num_jour_mois=day(date),
+         nom_mois=month(date,label=TRUE,abbr=FALSE,locale=Sys.getlocale("LC_TIME")),
+         num_semaine_an=isoweek(date))%>%
+  group_by(nom_mois)%>%
+  mutate(num_semaine_mois=case_when(nom_mois=="décembre" & num_semaine_an==1~6,
+                                    nom_mois=="décembre" & num_semaine_an!=1~num_semaine_an-48+1, # parce que les 2 derniers jours de décembre posent souci
+                                    TRUE~num_semaine_an-min(num_semaine_an)+1)
+                                    
+         )->calend
+
+i <- which(calend$date == "2019-12-20")
+nb_acc_20_dec <- calend$nb_accidents[i]
+```
+
+(ref:capcalendrier) Effectifs des accidents par jour sur l'année 2019  
+__Source des données :__ Par les auteurs selon les données de 2019 du ministère de l’Intérieur.  
+__Cohorte :__ `r sum(calend$nb_accidents)` accidents.  
+__Lecture :__ Il y a eu `r nb_acc_20_dec` accidents le 20 décembre 2019.  
+
+```{r calendrier, fig.cap = "(ref:capcalendrier)"}
+ggplot(calend,mapping=aes(x=num_semaine_mois,y=fct_rev(nom_jour),fill = nb_accidents))+
+  geom_tile()+
+  facet_wrap(facets="nom_mois",ncol=3,scales = "free")+
+  scale_fill_gradient(low="green",high="red")+
+  geom_text(mapping = aes(label = num_jour_mois), size = 2)+
+  labs(x="",y="")
+```
+
+
+\newpage
+|       Ensuite, nous avons étudié la répartition des usagers selon la gravité croisée avec d'autres variables telles que la catégorie de l'usager, le type de trajet effectué, l'état de la surface, les conditions atmosphériques, etc.  
+
+La répartition des individus selon la gravité et leur catégorie est disponible dans la figure \@ref(fig:barplotcatu).  
+
+
+
+# Prédiction de la gravité des accidents corporels routiers  
 
 \newpage
 # Conclusion
@@ -208,7 +253,7 @@ La répartition des individus selon la gravité et leur catégorie est disponibl
 \newpage
 # (APPENDIX) Annexes {-}
 # Annexes
-## Jeux de données utilisés 
+## Jeux de données utilisés {#jeux-donnees}
 Les jeux de données utilisés sont disponibles sur [DataGouv](https://www.data.gouv.fr/fr/datasets/bases-de-donnees-annuelles-des-accidents-corporels-de-la-circulation-routiere-annees-de-2005-a-2019/). Ces jeux de données décrivent les accidents corporels routiers ayant eu lieu en 2019.  
 
 Nous disposons de quatre bases de données :  
@@ -262,32 +307,43 @@ Nous choisissons donc de réaliser un premier tri sur ces variables et de garder
 ## Statistiques descriptives sur les usagers  
 
 ### Statistiques globales  
-
-### Croisement de la gravité avec d'autres variables
 #### Répartition des usagers par gravité  
-
-(ref:captableex) Effectifs des usagers par gravité
-```{r tableex, message = FALSE}
+(ref:captablegrav) Effectifs des usagers par gravité
+```{r tablegrav, message = FALSE}
 df$grav <- factor(df$grav, labels = c("Indemne",
                                                 "Tué", "Blessé hospitalisé", 
                                                 "Blessé léger"))
 
 tab_grav <- table(df$grav)
 
-kable(tab_grav, format = 'latex', caption = "(ref:captableex)", booktabs = TRUE) %>%
+kable(tab_grav, format = 'latex', caption = "(ref:captablegrav)", booktabs = TRUE) %>%
+  kable_styling(latex_options = c('striped', 'HOLD_position')) %>%
+  row_spec(0, bold = TRUE)
+```
+
+#### Répartition des usagers par catégorie d'usagers 
+(ref:captablecatu) Effectifs des usagers par catégorie d'usagers
+```{r tablecatu, message = FALSE}
+df$catu <- factor(df$catu, labels = c("Conducteur","Passager", "Piéton"))
+
+tab_catu <- table(df$catu)
+
+kable(tab_catu, format = 'latex', caption = "(ref:captablecatu)", booktabs = TRUE) %>%
   kable_styling(latex_options = c('striped', 'HOLD_position')) %>%
   row_spec(0, bold = TRUE)
 ```
 
 
+
+\newpage
+### Croisement de la gravité avec d'autres variables
 #### Répartition des usagers selon leur catégorie et la gravité  
 
-(ref:barplot1) Graphiques à bâtons sur les profils lignes, regroupement par catégorie d'usagers  
+(ref:barplotcatu) Graphiques à bâtons sur les profils lignes, regroupement par catégorie d'usagers  
 __Source des données :__ Par les auteurs selon les données de 2019 du ministère de l’Intérieur.  
 __Cohorte :__ `r nrow(df)` usagers.  
 __Lecture :__ 64% des piétons sont des blessés légers.  
 ```{r}
-df$catu <- factor(df$catu, labels = c("Conducteur","Passager", "Piéton"))
 # Tableau de contingence, Gravité de l'accident vs catégorie de l'usager
 tab_grav_catu <- table(df$catu, df$grav)
 
@@ -296,7 +352,7 @@ profil_ligne_grav_catu <- lprop(tab_grav_catu, digits = 0, percent = TRUE)
 
 ```
 
-```{r barplot1, fig.cap = "(ref:barplot1)"}
+```{r barplotcatu, fig.cap = "(ref:barplotcatu)"}
 ggplot(df, aes(x = catu, fill = grav))+
   geom_bar(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..]), position="dodge" ) +
   geom_text(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..],
@@ -312,7 +368,7 @@ ggplot(df, aes(x = catu, fill = grav))+
 \newpage
 #### Répartition des usagers selon leur trajet et la gravité  
 
-(ref:barplot2) Graphiques à bâtons sur les profils lignes, regroupement par type de trajet  
+(ref:barplottrajet) Graphiques à bâtons sur les profils lignes, regroupement par type de trajet  
 __Source des données :__ Par les auteurs selon les données de 2019 du ministère de l’Intérieur.  
 __Cohorte :__ `r nrow(df)` usagers.  
 __Lecture :__ 65% des usagers ayant un eu un accident lors d’un trajet d’utilisation professionnelle en ressortent indemnes.  
@@ -331,7 +387,7 @@ tab_grav_trajet<- table(df$trajet, df$grav)
 profil_ligne_grav_trajet <- lprop(tab_grav_trajet, digits = 0, percent = TRUE)
 ```
 
-```{r barplot2, fig.cap = "(ref:barplot2)",}
+```{r barplottrajet, fig.cap = "(ref:barplottrajet)",}
 ggplot(df, aes(x = trajet, fill = grav))+
   geom_bar(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..]), position="dodge" ) +
   geom_text(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..],
@@ -347,7 +403,7 @@ ggplot(df, aes(x = trajet, fill = grav))+
 \newpage
 #### Répartition des usagers selon la condition atmosphérique et la gravité  
 
-(ref:barplot3) Graphiques à bâtons sur les profils lignes, regroupement par type de trajet  
+(ref:barplotatm) Graphiques à bâtons sur les profils lignes, regroupement par type de trajet  
 __Source des données :__ Par les auteurs selon les données de 2019 du ministère de l’Intérieur.  
 __Cohorte :__ `r nrow(df)` usagers.  
 __Lecture :__ 42% des usagers ayant un eu un accident alors que la condition atmosphérique était normale en ressortent indemnes.   
@@ -362,7 +418,7 @@ tab_atm_grave<-table(df$grav,df$atm)
 profil_ligne_grav_atm <- lprop(tab_atm_grave, digits = 0, percent = TRUE)
 ```
 
-```{r barplot3, fig.cap = "(ref:barplot3)",}
+```{r barplotatm, fig.cap = "(ref:barplotatm)",}
 ggplot(df, aes(x = atm, fill = grav))+
   geom_bar(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..]), position="dodge" ) +
   geom_text(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..],
@@ -374,6 +430,64 @@ ggplot(df, aes(x = atm, fill = grav))+
   guides(fill = guide_legend(title = "Gravité")) + 
   theme(legend.position="right", legend.text = element_text(size = 7), legend.title = element_text(size = 7), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 ```
+
+#### Répartition des usagers selon la catégorie de route et la gravité  
+
+(ref:barplotroute) Graphiques à bâtons sur les profils lignes, regroupement par type de trajet  
+__Source des données :__ Par les auteurs selon les données de 2019 du ministère de l’Intérieur.  
+__Cohorte :__ `r nrow(df)` usagers.  
+__Lecture :__ 42% des usagers ayant un eu un accident alors que la condition atmosphérique était normale en ressortent indemnes.   
+```{r}
+df$catr <- factor(df$catr, labels = c("Autoroute","Nationale","Départementale",
+                                      "Voie Communales","Hors réseau public",
+                                      "Parking","Route metropole urbaine","Autre"))
+# Tableau de contingence catégorie de la route x gravité
+tab_grav_catr <- table(df$catr, df$grav)
+# Profils lignes, pour comparer les modalités de la gravité
+profil_ligne_grav_catr <- lprop(tab_grav_catr, digits = 0, percent = TRUE)
+```
+
+```{r barplotroute, fig.cap = "(ref:barplotroute)",}
+ggplot(df, aes(x = catr, fill = grav)) +
+  geom_bar(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..]), position="dodge" ) +
+  geom_text(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..],
+                 label=scales::percent(round(..count../tapply(..count.., ..x.. ,sum)[..x..], 2), 0.1)),
+            stat="count", position=position_dodge(0.9), vjust=-0.5, size = 2.5)+
+  scale_x_discrete("Catégorie de routes") + 
+  ylab('Pourcentage %') +
+  scale_y_continuous(labels = scales::percent) +
+  guides(fill = guide_legend(title = "Gravité")) + 
+  theme(legend.position="right", legend.text = element_text(size = 7), legend.title = element_text(size = 7), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+#### Répartition des usagers selon la surface et la gravité  
+
+(ref:barplotsurface) Graphiques à bâtons sur les profils lignes, regroupement par type de trajet  
+__Source des données :__ Par les auteurs selon les données de 2019 du ministère de l’Intérieur.  
+__Cohorte :__ `r nrow(df)` usagers.  
+__Lecture :__ 42% des usagers ayant un eu un accident alors que la condition atmosphérique était normale en ressortent indemnes.   
+```{r}
+df$surf <- factor(df$surf, labels = c("Normale","Mouillée","Flaques","Inondée","Enneigée",
+                                      "Boue","Verglacée","Corps gras ou huile","Autre"))
+# Tableau de contingence catégorie de la route x gravité
+tab_grav_surf <- table(df$surf, df$grav)
+# Profils lignes, pour comparer les modalités de la gravité
+profil_ligne_grav_surf <- lprop(tab_grav_surf, digits = 0, percent = TRUE)
+```
+
+```{r barplotsurface, fig.cap = "(ref:barplotsurface)",}
+ggplot(df, aes(x = surf, fill = grav)) +
+  geom_bar(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..]), position="dodge" ) +
+  geom_text(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..],
+                 label=scales::percent(round(..count../tapply(..count.., ..x.. ,sum)[..x..], 2), 0.1)),
+            stat="count", position=position_dodge(0.9), vjust=-0.5, size = 2.5)+
+  scale_x_discrete("État de la surface") + 
+  ylab('Pourcentage %') +
+  scale_y_continuous(labels = scales::percent) +
+  guides(fill = guide_legend(title = "Gravité")) + 
+  theme(legend.position="right", legend.text = element_text(size = 7), legend.title = element_text(size = 7), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+  
 
 ## Classification des individus
 ### Choix du nombre de variables explicatives  

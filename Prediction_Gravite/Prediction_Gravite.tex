@@ -207,17 +207,43 @@ Nous avons réaliser une étude descriptive des usagers impliqués dans ces acci
 \hypertarget{introduction}{%
 \section{Introduction}\label{introduction}}
 
-Enjeux majeurs des décisions politiques, les problèmes liés à la sécurité routière sont au cœur de tous les débats depuis maintenant quatre décennies.
+~~~~~~~~~~Enjeux majeurs des décisions politiques, les problèmes liés à la sécurité routière sont au cœur de tous les débats depuis maintenant quatre décennies.
+
 Grâce aux innovations dans la conception et l'utilisation des voitures\footnote{On citera la ceinture de sécurité, les airbags, les renforts latéraux parmi tant d'autres.}, couplées à de nombreuses mesures de sécurité\footnote{On citera l'abaissement drastique du taux d'alcoolémie, l'instauration du permis à points, l'alourdissement du régime des contraventions, la politique de généralisations des radars et l'abaissement de la vitesse de 90 à 80km/h sur le réseau secondaire.}, d'incontestables résultats ont été obtenus pour limiter le nombre et l'impact des accidents routiers dans notre vie quotidienne. Ainsi, par exemple, le nombre de tués sur la route est passé de 12510 en 1980 à 3480 en 2019\footnote{\href{http://www.securite-routiere.org/Fiches/statistiques/statfr.htm}{Statistiques de la sécurité routière}}. Toutefois, ces mesures montrent leur limite en termes d'efficacité : le nombre de tués se stabilise par exemple autour de 3400/3500.
+
+~~~~~~~~~~Notre étude porte sur les facteurs influençant la gravité des accidents corporels routiers. Nous allons essayer d'élaborer un modèle permettant de prédire la gravité d'un accident.
+
+Pour cela, nous avons choisi un ensemble de base de données issues du site \href{https://www.data.gouv.fr/fr/datasets/bases-de-donnees-annuelles-des-accidents-corporels-de-la-circulation-routiere-annees-de-2005-a-2019/}{DataGouv} sur les accidents corporels de la circulation routière de 2019. Les données utilisées sont présentées en annexe \ref{jeux-donnees}.
+
+~~~~~~~~~~Dans un premier temps, nous allons donc vous présenter une étude statistique des accidents corporels routiers en 2019, puis nous tenterons de mettre en place un modèle de prédiction de notre variable gravité.
 
 \hypertarget{uxe9tudes-des-accidents-corporels-routiers-de-2019-en-france}{%
 \section{Études des accidents corporels routiers de 2019 en France}\label{uxe9tudes-des-accidents-corporels-routiers-de-2019-en-france}}
 
-Dans un premier temps, nous avons étudié la répartition des usagers impliqués dans un accident selon la gravité. Cette répartition est illustrée dans la table @ref(tab:table\_grav).
+~~~~~~~~~~Dans un premier temps, nous avons étudié la répartition des usagers impliqués dans un accident corporel routier en 2019. Nous avons tout d'abord, étudié la répartition des usagers selon la gravité. Cette répartition est illustrée dans la table \ref{tab:tablegrav}. Ensuite, nous avons étudié la répartition des usagers selon leur catégorie d'usagers. Cette répartition est illustrée dnas la table \ref{tab:tablecatu}. Puis nous avons étudié la répartition des accidents sur l'année 2019. Cette répartition est visible dans la figure ci-dessous :
 
-Ensuite, nous avons étudié la répartition des usagers selon la gravité croisée avec d'autres variables telles que la catégorie de l'usager, le type de trajet effectué, l'état de la surface, les conditions atmosphériques, etc.
 
-La répartition des individus selon la gravité et leur catégorie est disponible dans la figure \ref{fig:dotplotex}.
+
+
+
+
+\begin{figure}[ht!]
+
+{\centering \includegraphics{Prediction_Gravite_files/figure-latex/calendrier-1} 
+
+}
+
+\caption{Effectifs des accidents par jour sur l'année 2019\\
+\textbf{Source des données :} Par les auteurs selon les données de 2019 du ministère de l'Intérieur.\\
+\textbf{Cohorte :} 58838 accidents.\\
+\textbf{Lecture :} Il y a eu 254 accidents le 20 décembre 2019.}\label{fig:calendrier}
+\end{figure}
+
+\newpage
+
+~~~~~~Ensuite, nous avons étudié la répartition des usagers selon la gravité croisée avec d'autres variables telles que la catégorie de l'usager, le type de trajet effectué, l'état de la surface, les conditions atmosphériques, etc.
+
+La répartition des individus selon la gravité et leur catégorie est disponible dans la figure \ref{fig:barplotcatu}.
 
 \hypertarget{pruxe9diction-de-la-gravituxe9-des-accidents-corporels-routiers}{%
 \section{Prédiction de la gravité des accidents corporels routiers}\label{pruxe9diction-de-la-gravituxe9-des-accidents-corporels-routiers}}
@@ -236,8 +262,8 @@ La répartition des individus selon la gravité et leur catégorie est disponibl
 \hypertarget{annexes}{%
 \section{Annexes}\label{annexes}}
 
-\hypertarget{jeux-de-donnuxe9es-utilisuxe9s}{%
-\subsection{Jeux de données utilisés}\label{jeux-de-donnuxe9es-utilisuxe9s}}
+\hypertarget{jeux-donnees}{%
+\subsection{Jeux de données utilisés}\label{jeux-donnees}}
 
 Les jeux de données utilisés sont disponibles sur \href{https://www.data.gouv.fr/fr/datasets/bases-de-donnees-annuelles-des-accidents-corporels-de-la-circulation-routiere-annees-de-2005-a-2019/}{DataGouv}. Ces jeux de données décrivent les accidents corporels routiers ayant eu lieu en 2019.
 
@@ -339,9 +365,6 @@ Nous choisissons donc de réaliser un premier tri sur ces variables et de garder
 \hypertarget{statistiques-globales}{%
 \subsubsection{Statistiques globales}\label{statistiques-globales}}
 
-\hypertarget{croisement-de-la-gravituxe9-avec-dautres-variables}{%
-\subsubsection{Croisement de la gravité avec d'autres variables}\label{croisement-de-la-gravituxe9-avec-dautres-variables}}
-
 \hypertarget{ruxe9partition-des-usagers-par-gravituxe9}{%
 \paragraph{Répartition des usagers par gravité}\label{ruxe9partition-des-usagers-par-gravituxe9}}
 
@@ -349,7 +372,7 @@ Nous choisissons donc de réaliser un premier tri sur ces variables et de garder
 
 \begin{table}[H]
 
-\caption{\label{tab:tableex}Effectifs des usagers par gravité}
+\caption{\label{tab:tablegrav}Effectifs des usagers par gravité}
 \centering
 \begin{tabular}[t]{lr}
 \toprule
@@ -363,6 +386,31 @@ Blessé léger & 53307\\
 \end{tabular}
 \end{table}
 
+\hypertarget{ruxe9partition-des-usagers-par-catuxe9gorie-dusagers}{%
+\paragraph{Répartition des usagers par catégorie d'usagers}\label{ruxe9partition-des-usagers-par-catuxe9gorie-dusagers}}
+
+
+
+\begin{table}[H]
+
+\caption{\label{tab:tablecatu}Effectifs des usagers par catégorie d'usagers}
+\centering
+\begin{tabular}[t]{lr}
+\toprule
+\textbf{Var1} & \textbf{Freq}\\
+\midrule
+\cellcolor{gray!6}{Conducteur} & \cellcolor{gray!6}{97355}\\
+Passager & 24356\\
+\cellcolor{gray!6}{Piéton} & \cellcolor{gray!6}{11264}\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\newpage
+
+\hypertarget{croisement-de-la-gravituxe9-avec-dautres-variables}{%
+\subsubsection{Croisement de la gravité avec d'autres variables}\label{croisement-de-la-gravituxe9-avec-dautres-variables}}
+
 \hypertarget{ruxe9partition-des-usagers-selon-leur-catuxe9gorie-et-la-gravituxe9}{%
 \paragraph{Répartition des usagers selon leur catégorie et la gravité}\label{ruxe9partition-des-usagers-selon-leur-catuxe9gorie-et-la-gravituxe9}}
 
@@ -373,14 +421,14 @@ Blessé léger & 53307\\
 
 \begin{figure}[ht!]
 
-{\centering \includegraphics{Prediction_Gravite_files/figure-latex/barplot1-1} 
+{\centering \includegraphics{Prediction_Gravite_files/figure-latex/barplotcatu-1} 
 
 }
 
 \caption{Graphiques à bâtons sur les profils lignes, regroupement par catégorie d'usagers\\
 \textbf{Source des données :} Par les auteurs selon les données de 2019 du ministère de l'Intérieur.\\
 \textbf{Cohorte :} 132975 usagers.\\
-\textbf{Lecture :} 64\% des piétons sont des blessés légers.}\label{fig:barplot1}
+\textbf{Lecture :} 64\% des piétons sont des blessés légers.}\label{fig:barplotcatu}
 \end{figure}
 
 \newpage
@@ -395,14 +443,14 @@ Blessé léger & 53307\\
 
 \begin{figure}[ht!]
 
-{\centering \includegraphics{Prediction_Gravite_files/figure-latex/barplot2-1} 
+{\centering \includegraphics{Prediction_Gravite_files/figure-latex/barplottrajet-1} 
 
 }
 
 \caption{Graphiques à bâtons sur les profils lignes, regroupement par type de trajet\\
 \textbf{Source des données :} Par les auteurs selon les données de 2019 du ministère de l'Intérieur.\\
 \textbf{Cohorte :} 132975 usagers.\\
-\textbf{Lecture :} 65\% des usagers ayant un eu un accident lors d'un trajet d'utilisation professionnelle en ressortent indemnes.}\label{fig:barplot2}
+\textbf{Lecture :} 65\% des usagers ayant un eu un accident lors d'un trajet d'utilisation professionnelle en ressortent indemnes.}\label{fig:barplottrajet}
 \end{figure}
 \newpage
 
@@ -416,14 +464,54 @@ Blessé léger & 53307\\
 
 \begin{figure}[ht!]
 
-{\centering \includegraphics{Prediction_Gravite_files/figure-latex/barplot3-1} 
+{\centering \includegraphics{Prediction_Gravite_files/figure-latex/barplotatm-1} 
 
 }
 
 \caption{Graphiques à bâtons sur les profils lignes, regroupement par type de trajet\\
 \textbf{Source des données :} Par les auteurs selon les données de 2019 du ministère de l'Intérieur.\\
 \textbf{Cohorte :} 132975 usagers.\\
-\textbf{Lecture :} 42\% des usagers ayant un eu un accident alors que la condition atmosphérique était normale en ressortent indemnes.}\label{fig:barplot3}
+\textbf{Lecture :} 42\% des usagers ayant un eu un accident alors que la condition atmosphérique était normale en ressortent indemnes.}\label{fig:barplotatm}
+\end{figure}
+
+\hypertarget{ruxe9partition-des-usagers-selon-la-catuxe9gorie-de-route-et-la-gravituxe9}{%
+\paragraph{Répartition des usagers selon la catégorie de route et la gravité}\label{ruxe9partition-des-usagers-selon-la-catuxe9gorie-de-route-et-la-gravituxe9}}
+
+
+
+
+
+
+\begin{figure}[ht!]
+
+{\centering \includegraphics{Prediction_Gravite_files/figure-latex/barplotroute-1} 
+
+}
+
+\caption{Graphiques à bâtons sur les profils lignes, regroupement par type de trajet\\
+\textbf{Source des données :} Par les auteurs selon les données de 2019 du ministère de l'Intérieur.\\
+\textbf{Cohorte :} 132975 usagers.\\
+\textbf{Lecture :} 42\% des usagers ayant un eu un accident alors que la condition atmosphérique était normale en ressortent indemnes.}\label{fig:barplotroute}
+\end{figure}
+
+\hypertarget{ruxe9partition-des-usagers-selon-la-surface-et-la-gravituxe9}{%
+\paragraph{Répartition des usagers selon la surface et la gravité}\label{ruxe9partition-des-usagers-selon-la-surface-et-la-gravituxe9}}
+
+
+
+
+
+
+\begin{figure}[ht!]
+
+{\centering \includegraphics{Prediction_Gravite_files/figure-latex/barplotsurface-1} 
+
+}
+
+\caption{Graphiques à bâtons sur les profils lignes, regroupement par type de trajet\\
+\textbf{Source des données :} Par les auteurs selon les données de 2019 du ministère de l'Intérieur.\\
+\textbf{Cohorte :} 132975 usagers.\\
+\textbf{Lecture :} 42\% des usagers ayant un eu un accident alors que la condition atmosphérique était normale en ressortent indemnes.}\label{fig:barplotsurface}
 \end{figure}
 
 \hypertarget{classification-des-individus}{%
