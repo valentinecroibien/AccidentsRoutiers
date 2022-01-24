@@ -29,6 +29,7 @@ bibliography: biblio_tp-urca.bib
 biblio-style: plain
 link-citations: yes
 toc : true
+toc_depth : 3
 ---
 ```{r, echo = FALSE}
 #Ce bloc configure quelques options d'affichage pour les blocs R
@@ -258,8 +259,12 @@ Nous choisissons donc de réaliser un premier tri sur ces variables et de garder
 * Le type de manoeuvre effectué,
 * Le moteur du véhicule.
 
-## Statistiques descriptives sur les usagers croisées avec la gravité  
-### Répartition des usagers par gravité  
+## Statistiques descriptives sur les usagers  
+
+### Statistiques globales  
+
+### Croisement de la gravité avec d'autres variables
+#### Répartition des usagers par gravité  
 
 (ref:captableex) Effectifs des usagers par gravité
 ```{r tableex, message = FALSE}
@@ -275,7 +280,7 @@ kable(tab_grav, format = 'latex', caption = "(ref:captableex)", booktabs = TRUE)
 ```
 
 
-### Répartition des usagers selon leur catégorie et la gravité  
+#### Répartition des usagers selon leur catégorie et la gravité  
 
 (ref:barplot1) Graphiques à bâtons sur les profils lignes, regroupement par catégorie d'usagers  
 __Source des données :__ Par les auteurs selon les données de 2019 du ministère de l’Intérieur.  
@@ -305,7 +310,7 @@ ggplot(df, aes(x = catu, fill = grav))+
 ```
 
 \newpage
-### Répartition des usagers selon leur trajet et la gravité  
+#### Répartition des usagers selon leur trajet et la gravité  
 
 (ref:barplot2) Graphiques à bâtons sur les profils lignes, regroupement par type de trajet  
 __Source des données :__ Par les auteurs selon les données de 2019 du ministère de l’Intérieur.  
@@ -340,7 +345,7 @@ ggplot(df, aes(x = trajet, fill = grav))+
         axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 ```
 \newpage
-### Répartition des usagers selon la condition atmosphérique et la gravité  
+#### Répartition des usagers selon la condition atmosphérique et la gravité  
 
 (ref:barplot3) Graphiques à bâtons sur les profils lignes, regroupement par type de trajet  
 __Source des données :__ Par les auteurs selon les données de 2019 du ministère de l’Intérieur.  
@@ -369,6 +374,13 @@ ggplot(df, aes(x = atm, fill = grav))+
   guides(fill = guide_legend(title = "Gravité")) + 
   theme(legend.position="right", legend.text = element_text(size = 7), legend.title = element_text(size = 7), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 ```
+
+## Classification des individus
+### Choix du nombre de variables explicatives  
+### Méthode de régression logistique
+### Méthode XGBoost
+### Méthode Random Forest  
+
 \newpage
 ## Dictionnaire des variables  
 * __Base caractéristiques__ :  

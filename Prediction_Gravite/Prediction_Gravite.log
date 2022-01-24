@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2022/dev) (preloaded format=pdflatex 2022.1.23)  23 JAN 2022 21:52
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2022/dev) (preloaded format=pdflatex 2022.1.23)  24 JAN 2022 11:32
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -689,7 +689,7 @@ LaTeX Font Info:    Trying to load font information for U+msb on input line 186
 (/Users/valentine/Library/TinyTeX/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-<logo_URCA.pdf, id=64, 307.1475pt x 216.81pt>
+<logo_URCA.pdf, id=76, 307.1475pt x 216.81pt>
 File: logo_URCA.pdf Graphic file (type pdf)
 <use logo_URCA.pdf>
 Package pdftex.def Info: logo_URCA.pdf  used on input line 186.
@@ -698,7 +698,7 @@ Package pdftex.def Info: logo_URCA.pdf  used on input line 186.
 \tf@toc=\write4
 \openout4 = `Prediction_Gravite.toc'.
 
-<FondURCA.png, id=81, 597.23125pt x 845.1575pt>
+<FondURCA.png, id=96, 597.23125pt x 845.1575pt>
 File: FondURCA.png Graphic file (type png)
 <use FondURCA.png>
 Package pdftex.def Info: FondURCA.png  used on input line 205.
@@ -712,52 +712,52 @@ LaTeX Warning: Reference `fig:dotplotex' on page 2 undefined on input line 220.
 
 
 [2] [3] [4]
-<Prediction_Gravite_files/figure-latex/barplot1-1.pdf, id=136, 493.845pt x 316.
+<Prediction_Gravite_files/figure-latex/barplot1-1.pdf, id=152, 493.845pt x 316.
 18124pt>
 File: Prediction_Gravite_files/figure-latex/barplot1-1.pdf Graphic file (type p
 df)
 <use Prediction_Gravite_files/figure-latex/barplot1-1.pdf>
 Package pdftex.def Info: Prediction_Gravite_files/figure-latex/barplot1-1.pdf  
-used on input line 370.
+used on input line 376.
 (pdftex.def)             Requested size: 493.84378pt x 316.18047pt.
 [5pdfTeX warning (ext4): destination with the same identifier (name{table.1}) h
 as been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.380 \newpage
+l.386 \newpage
               pdfTeX warning (ext4): destination with the same identifier (name
 {figure.1}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.380 \newpage
+l.386 \newpage
                <./Prediction_Gravite_files/figure-latex/barplot1-1.pdf>]
-<Prediction_Gravite_files/figure-latex/barplot2-1.pdf, id=156, 493.845pt x 316.
+<Prediction_Gravite_files/figure-latex/barplot2-1.pdf, id=175, 493.845pt x 316.
 18124pt>
 File: Prediction_Gravite_files/figure-latex/barplot2-1.pdf Graphic file (type p
 df)
 <use Prediction_Gravite_files/figure-latex/barplot2-1.pdf>
 Package pdftex.def Info: Prediction_Gravite_files/figure-latex/barplot2-1.pdf  
-used on input line 392.
+used on input line 398.
 (pdftex.def)             Requested size: 493.84378pt x 316.18047pt.
 [6pdfTeX warning (ext4): destination with the same identifier (name{figure.2}) 
 has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.401 \newpage
+l.407 \newpage
                <./Prediction_Gravite_files/figure-latex/barplot2-1.pdf>]
-<Prediction_Gravite_files/figure-latex/barplot3-1.pdf, id=171, 493.845pt x 316.
+<Prediction_Gravite_files/figure-latex/barplot3-1.pdf, id=191, 493.845pt x 316.
 18124pt>
 File: Prediction_Gravite_files/figure-latex/barplot3-1.pdf Graphic file (type p
 df)
 <use Prediction_Gravite_files/figure-latex/barplot3-1.pdf>
 Package pdftex.def Info: Prediction_Gravite_files/figure-latex/barplot3-1.pdf  
-used on input line 413.
+used on input line 419.
 (pdftex.def)             Requested size: 493.84378pt x 316.18047pt.
 [7pdfTeX warning (ext4): destination with the same identifier (name{figure.3}) 
 has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.422 \newpage
+l.444 \newpage
                <./Prediction_Gravite_files/figure-latex/barplot3-1.pdf>] [8] [9
 ] [10] [11] [12] [13] 
 AED: lastpage setting LastPage
@@ -766,13 +766,13 @@ AED: lastpage setting LastPage
 LaTeX Warning: There were undefined references.
 
 Package rerunfilecheck Info: File `Prediction_Gravite.out' has not changed.
-(rerunfilecheck)             Checksum: DE0856100230200453F1C7B5A1AA1436;3800.
+(rerunfilecheck)             Checksum: A68C4657BE7F6764484A99CC494F36D9;3750.
  ) 
 Here is how much of TeX's memory you used:
- 14741 strings out of 480227
- 237653 string characters out of 5894060
- 548300 words of memory out of 5000000
- 32365 multiletter control sequences out of 15000+600000
+ 14765 strings out of 480227
+ 238223 string characters out of 5894060
+ 550739 words of memory out of 5000000
+ 32375 multiletter control sequences out of 15000+600000
  521924 words of font info for 59 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  75i,13n,77p,1026b,559s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -784,10 +784,10 @@ rs/valentine/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb></Users
 /valentine/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb></Users/va
 lentine/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr8.pfb></Users/valen
 tine/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr9.pfb>
-Output written on Prediction_Gravite.pdf (14 pages, 342723 bytes).
+Output written on Prediction_Gravite.pdf (14 pages, 345165 bytes).
 PDF statistics:
- 270 PDF objects out of 1000 (max. 8388607)
- 224 compressed objects within 3 object streams
- 54 named destinations out of 1000 (max. 500000)
- 146 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 299 PDF objects out of 1000 (max. 8388607)
+ 253 compressed objects within 3 object streams
+ 68 named destinations out of 1000 (max. 500000)
+ 170 words of extra memory for PDF output out of 10000 (max. 10000000)
 
