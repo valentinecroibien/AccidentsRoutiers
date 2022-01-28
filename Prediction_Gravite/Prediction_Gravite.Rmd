@@ -517,17 +517,24 @@ data_test <- dtf[-train_id,]
 
 ### Méthode de choix des données train/test
 
-En vue de l'apprentissage des nos algorithmes de machine learning pour la prédiction, il est essentiel d'utiliser une méthode qui va choisir les données d'apprentissage et les données de test. Ici nous divisons aléatoirement notre base en 2, le tableau ci-dessous décrit cette division.  
+En vue de l'apprentissage des nos algorithmes de machine learning pour la prédiction, il est essentiel d'utiliser une méthode qui va choisir les données d'apprentissage et les données de test.  
+Ici nous divisons aléatoirement notre base en 2, le tableau ci-dessous décrit cette division.  
+
+(ref:tabletraintest) Repartition des observation en vue de l'apprentissage
+```{r tabletraintest, message = FALSE}
+table_traintest <- data.frame(c('train','test'),c(nrow(data_train),nrow(data_test)),c(70,30))
+colnames(table_traintest) <- c('Base','Nb_obs','Pourcentage')
+
+kable(table_traintest, format = 'latex', caption = "(ref:tabletraintest)", booktabs = TRUE) %>%
+  kable_styling(latex_options = c('striped', 'HOLD_position')) %>%
+  row_spec(0, bold = TRUE)
+```
 
 
 ### Méthode de régression logistique
 
 
 ### Méthode XGBoost
-
-(ref:confusionxgb) Matrice de confusion représentant les résultats de la prédiction XGBoost  
-__Source des données :__ Par les auteurs selon les données de 2019 du ministère de l’Intérieur.  
-__Lecture :__ Le modèle prédictif donne 13479 bonnes prédiction pour la modalité "Indemne".  
 
 ```{r, include = FALSE}
 # Encodage
@@ -565,11 +572,15 @@ ggplot(data = plotTable, mapping = aes(x = Reference, y = Prediction, fill = goo
 ```
 
 
-### Méthode Random Forest  
+La méthode XGBoost donne un taux d'erreur de `r round(err_xg,2)`%.  
+On représente la répartition des bonnes et mauvaises prédictions sur le graphe suivant.  
 
-(ref:confusionrf) Matrice de confusion représentant les résultats de la prédiction Random Forest  
+(ref:confusionxgb) Matrice de confusion représentant les résultats de la prédiction XGBoost  
 __Source des données :__ Par les auteurs selon les données de 2019 du ministère de l’Intérieur.  
 __Lecture :__ Le modèle prédictif donne 13479 bonnes prédiction pour la modalité "Indemne".  
+
+
+### Méthode Random Forest  
 
 ```{r, include = FALSE}
 # Ajustement d'une forêt aléatoire pour la prédiction de la gravité
@@ -604,8 +615,12 @@ ggplot(data = plotTable, mapping = aes(x = Reference, y = Prediction, fill = goo
   labs(fill = "Prediction")
 ```
 
+La méthode Random Forest donne un taux d'erreur de `r round(err_rf,2)`%.  
+On représente la répartition des bonnes et mauvaises prédictions sur le graphe suivant.  
 
-
+(ref:confusionrf) Matrice de confusion représentant les résultats de la prédiction Random Forest  
+__Source des données :__ Par les auteurs selon les données de 2019 du ministère de l’Intérieur.  
+__Lecture :__ Le modèle prédictif donne 13479 bonnes prédiction pour la modalité "Indemne".  
 
 \newpage
 ## Dictionnaire des variables  
@@ -970,3 +985,4 @@ Le renseignement du caractère indique la présence et l’utilisation de l’é
     1 – Seul  
     2 – Accompagné  
     3 – En groupe
+
