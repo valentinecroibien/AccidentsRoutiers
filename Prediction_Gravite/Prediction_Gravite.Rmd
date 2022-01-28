@@ -50,13 +50,18 @@ library("tidyverse")
 library("questionr")
 library("FactoMineR")
 library("factoextra")
+library('nnet')
+library('randomForest')
+library('caret')
+library('fastDummies')
+library('xgboost')
 ```
 
 ```{r}
 ########## MISE EN PLACE DE LA BASE
 
 ### Chargement de l'emplacement
-setwd("~/Documents/M2_SEP/SEMESTRE_1/SEP0953/GESTION_PROJET/PROJET/AccidentsRoutiers")
+setwd("~/Documents/Université/Master SEP/M2/S1/SEP0953 - Conf, Business/Cousin/AccidentsRoutiers")
 
 
 
@@ -66,25 +71,23 @@ lieux <- read.csv2(file="data/lieux-2019.csv")
 usagers <- read.csv2(file="data/usagers-2019.csv")
 vehic <- read.csv2(file="data/vehicules-2019.csv")
 
-# On garde les variables utiles
-var_carac <- c("Num_Acc","jour","mois","hrmn","lum","dep","com","agg","int","atm","col")
+### Trie dans les variables
+# Base caracteritisques
+var_carac <- c("Num_Acc","jour","mois","hrmn","lum","com","agg","int","atm","col")
 carac <- carac[,var_carac]
-
+# Base lieux
 var_lieux <- c("Num_Acc","catr","circ","nbv","vosp","prof",
                "plan","surf","infra","situ","vma")
 lieux <- lieux[,var_lieux]
-
+# Base vehicule
 var_vehic <- c("Num_Acc", "id_vehicule","catv","obs","obsm","manv","motor")
 vehic <- vehic[,var_vehic]
-
+# Base usagers
 var_usagers <- c("Num_Acc","id_vehicule", "catu","grav",
                  "sexe","an_nais","trajet")
 usagers <- usagers[,var_usagers]
 
-
-
 ### Formatage des données
-
 ## Base caracteristiques
 # numero accident
 carac$Num_Acc <- as.factor(carac$Num_Acc)
@@ -98,6 +101,10 @@ carac <- carac[,-c(2,3)]
 carac <- relocate(carac,"date",.after="Num_Acc")
 # heure 
 carac$hrmn <- as.factor(carac$hrmn)
+carac$hrmn<-hour(strptime(carac$hrmn,format="%H:%M"))
+carac$hrmn<- cut(carac$hrmn, breaks =0:24, labels = NULL,
+              include.lowest = TRUE, right = FALSE,
+              ordered_result = TRUE)
 # lumiere
 carac$lum <- as.factor(carac$lum)
 # commune
@@ -110,12 +117,13 @@ carac$int <- as.factor(carac$int)
 carac$atm <- as.factor(carac$atm)
 # type de collision
 carac$col <- as.factor(carac$col)
-
 ## Base lieux
 # categorie de route
 lieux$catr <- as.factor(lieux$catr)
 # regime de circulation
 lieux$circ <- as.factor(lieux$circ)
+# nb de voies
+lieux$nbv <- as.factor(lieux$nbv)
 # voie reservée
 lieux$vosp <- as.factor(lieux$vosp)
 # déclivité
@@ -128,7 +136,6 @@ lieux$surf <- as.factor(lieux$surf)
 lieux$infra <- as.factor(lieux$infra)
 # situation de l'accident
 lieux$situ <- as.factor(lieux$situ)
-
 ## Base véhicules
 # id vehicule
 vehic$id_vehicule <- as.factor(vehic$id_vehicule)
@@ -142,7 +149,6 @@ vehic$obsm <- as.factor(vehic$obsm)
 vehic$manv <- as.factor(vehic$manv)
 # motorisation
 vehic$motor <- as.factor(vehic$motor)
-
 ## Base usagers
 # catégorie de l'usager
 usagers$catu <- as.factor(usagers$catu)
@@ -153,32 +159,28 @@ usagers$sexe <- as.factor(usagers$sexe)
 # type de trajet
 usagers$trajet <- as.factor(usagers$trajet)
 
-
-
 ### Valeurs manquantes et abérrantes
-
-## Base caracteristiques
+# Base caracteristiques
 va <- which(carac$atm==-1)
 va2 <- which(carac$col==-1)
 va3 <-which(is.nan(carac$adr) | carac$adr=="-")
 carac<-carac[-c(va, va2, va3),]
-
-## Base lieux
+# Base lieux
+ab <- which(lieux$vma<10 | lieux$vma==12 | lieux$vma==42 | lieux$vma>130)
+lieux <- lieux[-c(ab),]
+lieux$vma <- as.factor(lieux$vma)
 lieux$surf <- str_replace_all(lieux$surf, pattern = "-1", 
                               replacement = "9")
-
-
 
 ### Jointures
 carac_lieux <- inner_join(carac,lieux,by="Num_Acc")
 lieux_usagers <- inner_join(lieux,usagers,by="Num_Acc")
 usagers_vehic <- inner_join(usagers,vehic,by="id_vehicule")
 colnames(usagers_vehic)[1] <- "Num_Acc"
-
 var_usagers_vehic <- c("Num_Acc","id_vehicule","grav","catu","sexe","trajet","catv","obs","obsm","manv","motor")
 usagers_vehic <- usagers_vehic[,var_usagers_vehic]
-
 df <- inner_join(carac_lieux,usagers_vehic,by="Num_Acc")
+df2 <- df
 ```
 
 
@@ -387,7 +389,7 @@ tab_grav_trajet<- table(df$trajet, df$grav)
 profil_ligne_grav_trajet <- lprop(tab_grav_trajet, digits = 0, percent = TRUE)
 ```
 
-```{r barplottrajet, fig.cap = "(ref:barplottrajet)",}
+```{r barplottrajet, fig.cap = "(ref:barplottrajet)"}
 ggplot(df, aes(x = trajet, fill = grav))+
   geom_bar(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..]), position="dodge" ) +
   geom_text(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..],
@@ -418,7 +420,7 @@ tab_atm_grave<-table(df$grav,df$atm)
 profil_ligne_grav_atm <- lprop(tab_atm_grave, digits = 0, percent = TRUE)
 ```
 
-```{r barplotatm, fig.cap = "(ref:barplotatm)",}
+```{r barplotatm, fig.cap = "(ref:barplotatm)"}
 ggplot(df, aes(x = atm, fill = grav))+
   geom_bar(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..]), position="dodge" ) +
   geom_text(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..],
@@ -447,7 +449,7 @@ tab_grav_catr <- table(df$catr, df$grav)
 profil_ligne_grav_catr <- lprop(tab_grav_catr, digits = 0, percent = TRUE)
 ```
 
-```{r barplotroute, fig.cap = "(ref:barplotroute)",}
+```{r barplotroute, fig.cap = "(ref:barplotroute)"}
 ggplot(df, aes(x = catr, fill = grav)) +
   geom_bar(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..]), position="dodge" ) +
   geom_text(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..],
@@ -475,7 +477,7 @@ tab_grav_surf <- table(df$surf, df$grav)
 profil_ligne_grav_surf <- lprop(tab_grav_surf, digits = 0, percent = TRUE)
 ```
 
-```{r barplotsurface, fig.cap = "(ref:barplotsurface)",}
+```{r barplotsurface, fig.cap = "(ref:barplotsurface)"}
 ggplot(df, aes(x = surf, fill = grav)) +
   geom_bar(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..]), position="dodge" ) +
   geom_text(aes( y=..count../tapply(..count.., ..x.. ,sum)[..x..],
@@ -490,10 +492,120 @@ ggplot(df, aes(x = surf, fill = grav)) +
   
 
 ## Classification des individus
-### Choix du nombre de variables explicatives  
+### Choix du nombre de variables explicatives
+
+```{r}
+### On passe de 4 à 3 modalités pour grav (hospitalisé et tué sont regroupés)
+df2$grav[df2$grav=="2"] <- "3"
+df2$grav[df2$grav=="4"] <- "2"
+df2$grav <- factor(df2$grav,exclude=NULL)
+```
+
+```{r}
+### En attente du modèle AIC
+var <- c('grav','catv','catu','obsm','agg','col','obs','catr','sexe','manv','trajet','circ','situ',
+         'nbv','vma')
+dtf <- df2[,var]
+
+### Construction des bases test et train
+N <- nrow(dtf)
+set.seed(123)
+train_id <- sample(1:N, size = 0.7*N, replace = FALSE)
+data_train <- dtf[train_id,]
+data_test <- dtf[-train_id,]
+```
+
+### Méthode de choix des données train/test
+
+En vue de l'apprentissage des nos algorithmes de machine learning pour la prédiction, il est essentiel d'utiliser une méthode qui va choisir les données d'apprentissage et les données de test. Ici nous divisons aléatoirement notre base en 2, le tableau ci-dessous décrit cette division.  
+
+
 ### Méthode de régression logistique
+
+
 ### Méthode XGBoost
+
+(ref:confusionxgb) Matrice de confusion représentant les résultats de la prédiction XGBoost  
+__Source des données :__ Par les auteurs selon les données de 2019 du ministère de l’Intérieur.  
+__Lecture :__ Le modèle prédictif donne 13479 bonnes prédiction pour la modalité "Indemne".  
+
+```{r, include = FALSE}
+# Encodage
+Y_train <- data_train['grav']
+X_train <- data.matrix(fastDummies::dummy_cols(data_train[,-1],remove_selected_columns = TRUE))
+Y_test <- data_test['grav']
+X_test <- data.matrix(fastDummies::dummy_cols(data_test[,-1],remove_selected_columns = TRUE))
+xgb_train = xgb.DMatrix(data=X_train, label=Y_train$grav)
+xgb_test = xgb.DMatrix(data=X_test, label=Y_test$grav)
+# Prediction
+xg_results <- xgboost(data = xgb_train, max_depth = 10, nrounds = 10)
+pred_xg <- round(predict(xg_results, xgb_test))
+pred_xg[(pred_xg>3)] <- 3
+err_xg <- mean(!(pred_xg == Y_test$grav))
+err_xg
+# Matrice de confusion
+conf <- confusionMatrix(data = factor(pred_xg), reference = Y_test$grav)
+```
+
+```{r confusionxgb, fig.cap = "(ref:confusionxgb)", message = FALSE}
+table <- data.frame(conf$table)
+plotTable <- table %>%
+  mutate(goodbad = ifelse(table$Prediction == table$Reference, "good", "bad")) %>%
+  group_by(Reference) %>%
+  mutate(prop = Freq/sum(Freq))
+ggplot(data = plotTable, mapping = aes(x = Reference, y = Prediction, fill = goodbad, alpha = prop)) +
+  geom_tile() +
+  geom_text(aes(label = Freq), vjust = .5, fontface  = "bold", alpha = 1) +
+  scale_fill_manual(values = c(good = "green", bad = "red")) +
+  theme_bw() +
+  xlim(rev(levels(table$Reference))) +
+  scale_y_discrete(labels=c("Indemne", "Blessé leger", "Tué ou hospitalisé")) +
+  scale_x_discrete(labels=c("Indemne", "Blessé leger", "Tué ou hospitalisé")) +
+  labs(fill = "Prediction")
+```
+
+
 ### Méthode Random Forest  
+
+(ref:confusionrf) Matrice de confusion représentant les résultats de la prédiction Random Forest  
+__Source des données :__ Par les auteurs selon les données de 2019 du ministère de l’Intérieur.  
+__Lecture :__ Le modèle prédictif donne 13479 bonnes prédiction pour la modalité "Indemne".  
+
+```{r, include = FALSE}
+# Ajustement d'une forêt aléatoire pour la prédiction de la gravité
+set.seed(654)
+randomForest(formula = grav ~ ., # Modele visé
+             data = data_train, # Données utilisées
+             ntree = 10, # Nombre d'arbres
+             mtry = 2, # Nombre de variables candidates à chaque coupure
+             importance = TRUE # Stocker l'importance des variables dans l'objet résultat
+) -> rf_results
+# Prédiction sur la base test
+pred_rf <- predict(object = rf_results, newdata = data_test)
+err_rf <- mean(!(pred_rf == data_test$grav))
+# Matrice de confusion
+conf <- confusionMatrix(data = pred_rf, reference = data_test$grav)
+```
+
+```{r confusionrf, fig.cap = "(ref:confusionrf)", message = FALSE}
+table <- data.frame(conf$table)
+plotTable <- table %>%
+  mutate(goodbad = ifelse(table$Prediction == table$Reference, "good", "bad")) %>%
+  group_by(Reference) %>%
+  mutate(prop = Freq/sum(Freq))
+ggplot(data = plotTable, mapping = aes(x = Reference, y = Prediction, fill = goodbad, alpha = prop)) +
+  geom_tile() +
+  geom_text(aes(label = Freq), vjust = .5, fontface  = "bold", alpha = 1) +
+  scale_fill_manual(values = c(good = "green", bad = "red")) +
+  theme_bw() +
+  xlim(rev(levels(table$Reference))) +
+  scale_y_discrete(labels=c("Indemne", "Blessé leger", "Tué ou hospitalisé")) +
+  scale_x_discrete(labels=c("Indemne", "Blessé leger", "Tué ou hospitalisé")) +
+  labs(fill = "Prediction")
+```
+
+
+
 
 \newpage
 ## Dictionnaire des variables  
@@ -858,4 +970,3 @@ Le renseignement du caractère indique la présence et l’utilisation de l’é
     1 – Seul  
     2 – Accompagné  
     3 – En groupe
-
