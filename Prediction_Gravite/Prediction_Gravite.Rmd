@@ -709,7 +709,7 @@ X_test <- data.matrix(fastDummies::dummy_cols(data_test[,-1],remove_selected_col
 xgb_train = xgb.DMatrix(data=X_train, label=Y_train$grav)
 xgb_test = xgb.DMatrix(data=X_test, label=Y_test$grav)
 # Prediction
-xg_results <- xgboost(data = xgb_train, max_depth = 10, nrounds = 10)
+xg_results <- xgboost(data = xgb_train, max_depth = 10, nrounds = 50)
 pred_xg <- round(predict(xg_results, xgb_test))
 pred_xg[(pred_xg>3)] <- 3
 err_xg <- mean(!(pred_xg == Y_test$grav))
@@ -754,7 +754,7 @@ __Lecture :__ Le modèle prédictif donne `r table['Freq'][1,1]` bonnes prédict
 set.seed(654)
 randomForest(formula = grav ~ ., # Modele visé
              data = data_train, # Données utilisées
-             ntree = 10, # Nombre d'arbres
+             ntree = 100, # Nombre d'arbres
              mtry = 2, # Nombre de variables candidates à chaque coupure
              importance = TRUE # Stocker l'importance des variables dans l'objet résultat
 ) -> rf_results
