@@ -180,8 +180,6 @@ df2 <- df
 ```
 
 
-
-
 \newpage
 # Introduction  
 
@@ -199,7 +197,7 @@ Pour cela, nous avons choisi un ensemble de base de données issues du site [Dat
 
 \newpage
 # Études des accidents corporels routiers de 2019 en France  
-|           Dans un premier temps, nous avons étudié la répartition des usagers impliqués dans un accident corporel routier en 2019. Nous avons tout d'abord, étudié la répartition des usagers selon la gravité. Cette répartition est illustrée dans la table \@ref(tab:tablegrav). Ensuite, nous avons étudié la répartition des usagers selon leur catégorie d'usagers. Cette répartition est illustrée dans la table \@ref(tab:tablecatu). Puis, nous avons étudié la répartition des accidents sur l'année 2019. Cette répartition est visible dans la figure ci-dessous :  
+|           Dans un premier temps, nous avons étudié la répartition des usagers impliqués dans un accident corporel routier en 2019. Nous avons tout d'abord, étudié la répartition des usagers selon la gravité. Ensuite, nous avons étudié la répartition des usagers selon leur catégorie d'usagers. Puis, nous avons étudié la répartition des accidents sur l'année 2019. Cette répartition est visible dans la figure ci-dessous :  
 
 ```{r}
 df %>%
@@ -284,7 +282,14 @@ C’est donc la méthode RandomForest qui donne les meilleures prédictions et q
 
 \newpage
 # Conclusion
+|       Notre travail nous a amené à comprendre les facteurs qui influencent la gravité d’un accident. L’ampleur des données a nécessité un examen approfondi des bases utilisées, un nettoyage des données et des variables de façon à nous recentrer sur ce qui semblait être le plus pertinent. Il a fallu plusieurs fois revenir sur nos pas pour optimiser ce long travail sur une base de données particulièrement riche.  
 
+Il a fallu également comprendre les interactions entre les différentes caractéristiques qui décrivent un accident. Cela nous a fréquemment amenés à interroger notre vision globale du sujet et à remettre en question les préjugés que l’on a parfois, comme le rôle de la place de la victime dans le véhicule ou celui de la météorologie par exemple.  
+
+Enfin, l’utilisation des techniques d’apprentissage supervisé nous a permis de mettre en évidence une conjonction de facteurs qui expliquent de façon relativement efficace la gravité d’un accident. Là où nous attendions, peut-être de façon un peu naïve, la luminosité par exemple, nous avons mis en exergue d’autres facteurs : le type de collision ou le type de trajet effectué. Les autres facteurs mis au jour semblent plutôt de bon sens et sont d’ailleurs bien connus dans le monde de l’accidentologie et de l’assurance : le sexe et la présence d’obstacle pour ne citer qu’eux.  
+
+
+|       D’autres pistes restent ouvertes pour améliorer les modèles construits afin de peut-être gagner en précision. Le regroupement des modalités parfois nombreuses au sein d’une même variable ou un traitement valorisé de l’information portée par la tranche horaire de l’accident mériteraient sans doute d’enrichir nos modèles, en dépit de la lourdeur calculatoire qui en résulterait. Un choix plus restreint dans le nombre d’individus accidentés sera sans doute à utiliser conjointement à cet effet.  
 
 \newpage
 # (APPENDIX) Annexes {-}
@@ -586,8 +591,6 @@ ggplot(df, aes(x = surf, fill = grav)) +
   
 \newpage
 ## Classification des individus
-### Choix du nombre de variables explicatives {#choix-var}
-
 ```{r}
 ### On passe de 4 à 3 modalités pour grav (hospitalisé et tué sont regroupés)
 df2$grav[df2$grav=="2"] <- "3"
@@ -607,7 +610,6 @@ train_id <- sample(1:N, size = 0.7*N, replace = FALSE)
 data_train <- dtf[train_id,]
 data_test <- dtf[-train_id,]
 ```
-
 
 ### Méthode de choix des données train/test {#div-train-test}
 
@@ -655,7 +657,7 @@ errclass<-function(l=0.7){
 cl <- detectCores() %>% -1 %>% makeCluster
 registerDoParallel(cl)
 resultats<-foreach(e=1:10,.packages=c("nnet"),.combine=c) %dopar% {errclass(0.7)}
-print(mean(resultats))     #33,6%
+#print(mean(resultats))     #33,6%
 stopImplicitCluster()
 # Matrice de confusion
 conflog <- confusionMatrix(data = factor(pred.moda.modele.optimal), reference = data_test$grav)

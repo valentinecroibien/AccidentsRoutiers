@@ -222,7 +222,7 @@ Pour cela, nous avons choisi un ensemble de base de données issues du site \hre
 \hypertarget{uxe9tudes-des-accidents-corporels-routiers-de-2019-en-france}{%
 \section{Études des accidents corporels routiers de 2019 en France}\label{uxe9tudes-des-accidents-corporels-routiers-de-2019-en-france}}
 
-~~~~~~~~~~Dans un premier temps, nous avons étudié la répartition des usagers impliqués dans un accident corporel routier en 2019. Nous avons tout d'abord, étudié la répartition des usagers selon la gravité. Cette répartition est illustrée dans la table \ref{tab:tablegrav}. Ensuite, nous avons étudié la répartition des usagers selon leur catégorie d'usagers. Cette répartition est illustrée dnas la table \ref{tab:tablecatu}. Puis nous avons étudié la répartition des accidents sur l'année 2019. Cette répartition est visible dans la figure ci-dessous :
+~~~~~~~~~~Dans un premier temps, nous avons étudié la répartition des usagers impliqués dans un accident corporel routier en 2019. Nous avons tout d'abord, étudié la répartition des usagers selon la gravité. Ensuite, nous avons étudié la répartition des usagers selon leur catégorie d'usagers. Puis, nous avons étudié la répartition des accidents sur l'année 2019. Cette répartition est visible dans la figure ci-dessous :
 
 
 
@@ -247,24 +247,14 @@ Pour cela, nous avons choisi un ensemble de base de données issues du site \hre
 
 ~~~~~~Nous étudions la répartition des usagers selon la gravité croisée avec d'autres variables telles que la catégorie de l'usager, le type de trajet effectué, l'état de la surface, les conditions atmosphériques, etc. Nous pouvons tirer de cette étude que, globalement, les usagers ressortaient indemnes ou légèrement blessés des accidents corporels routiers. Très peu d'usagers, moins de 5\%, étaient tués lors de l'accident. En croisant la gravité avec la catégorie de l'usager, nous remarquons que les usagers présents dans le véhicule sortent majoritairement indemnes ou légèrement blessés de l'accident. Contrairement aux idées reçues, il semblerait que la place du passager ne soit pas celle « du mort » puisque qu'il y a autant de tués dans cette catégorie que pour les conducteurs ou les piétons. De plus, les piétons sont, logiquement, plus rapidement grièvement blessés.
 
-~~~~~~Ensuite, lorsque nous croisons la gravité au type de trajet effectué, nous remarquons à nouveau que les usagers ressortent majoritairement indemnes ou légèrement blessés des accidents. Nous remarquons également que les types de trajets pour lesquels il y a le plus de tués sont les trajets Promenade -- loisirs ou Courses -- achats tandis et que le type de trajet pour lequel il y a le plus de personnes indemnes est celui de l'Utilisation professionnelle.
+~~~~~~Ensuite, lorsque nous croisons la gravité au type de trajet effectué, nous remarquons à nouveau que les usagers ressortent majoritairement indemnes ou légèrement blessés des accidents. Nous remarquons également que les types de trajets pour lesquels il y a le plus de tués sont les trajets promenade -- loisirs ou courses -- achats tandis et que le type de trajet pour lequel il y a le plus de personnes indemnes est celui de l'utilisation professionnelle.
 
 ~~~~~~Après cela, en croisant la gravité aux types de conditions atmosphériques, nous constatons que la gravité de l'accident est plus élevée lorsque les conditions météorologiques sont extrêmes, par exemple lorsque qu'il y a du vent fort ou des tempêtes.
 
 ~~~~~~Maintenant que nous avons une idée générale de la gravité des accidents corporels routiers de 2019, nous allons tenter de classifier les usagers par niveau de gravité et de créer un modèle de prédiction de la gravité.
 
-\newpage
-
 \hypertarget{pruxe9diction-de-la-gravituxe9-des-accidents-corporels-routiers}{%
 \section{Prédiction de la gravité des accidents corporels routiers}\label{pruxe9diction-de-la-gravituxe9-des-accidents-corporels-routiers}}
-
-Rappelons que l'objectif est de prédire la gravité des accidents de la route à l'aide de différentes variables relevées sur chaque accident ayant eu lieu en France en 2019. Grâce à ce modèle de prédiction recherché nous voulons prédire la gravité d'un accident en ayant connaissance des certains facteurs pour ainsi determiner ce qui influence cette gravité. Pour se faire nous avons determiné la gravité des dommages corporels des usagers impliqués dans l'accident sur une échelle entre 1 et 3 tel que :\\
-* 1 : l'usager est indemne\\
-* 2 : l'usager est blessé leger\\
-* 3 : l'usager est hospitalisé ou décédé\\
-Le fait de regrouper ``hospitalisé'' et ``décédé'' est volontaire dans le but de rendre le modèle optimal.
-
-La première chose à faire est de trouver quel modèle explique le mieux notre variable à prèdire, c'est à dire quelles sont les variables, parmis toutes celles selectionnées, à choisir pour obtenir les meilleurs résultats de prédiction.
 
 Rappelons que l'objectif est de prédire la gravité des accidents de la route à l'aide de différentes variables relevées sur chaque accident ayant eu lieu en France en 2019. Grâce à ce modèle de prédiction recherché nous voulons prédire la gravité d'un accident en ayant connaissance des certains facteurs pour ainsi determiner ce qui influence cette gravité. Pour se faire nous avons determiné la gravité des dommages corporels des usagers impliqués dans l'accident sur une échelle entre 1 et 3 tel que :
 
@@ -330,6 +320,14 @@ C'est donc la méthode RandomForest qui donne les meilleures prédictions et que
 
 \hypertarget{conclusion}{%
 \section{Conclusion}\label{conclusion}}
+
+~~~~~~Notre travail nous a amené à comprendre les facteurs qui influencent la gravité d'un accident. L'ampleur des données a nécessité un examen approfondi des bases utilisées, un nettoyage des données et des variables de façon à nous recentrer sur ce qui semblait être le plus pertinent. Il a fallu plusieurs fois revenir sur nos pas pour optimiser ce long travail sur une base de données particulièrement riche.
+
+Il a fallu également comprendre les interactions entre les différentes caractéristiques qui décrivent un accident. Cela nous a fréquemment amenés à interroger notre vision globale du sujet et à remettre en question les préjugés que l'on a parfois, comme le rôle de la place de la victime dans le véhicule ou celui de la météorologie par exemple.
+
+Enfin, l'utilisation des techniques d'apprentissage supervisé nous a permis de mettre en évidence une conjonction de facteurs qui expliquent de façon relativement efficace la gravité d'un accident. Là où nous attendions, peut-être de façon un peu naïve, la luminosité par exemple, nous avons mis en exergue d'autres facteurs : le type de collision ou le type de trajet effectué. Les autres facteurs mis au jour semblent plutôt de bon sens et sont d'ailleurs bien connus dans le monde de l'accidentologie et de l'assurance : le sexe et la présence d'obstacle pour ne citer qu'eux.
+
+~~~~~~D'autres pistes restent ouvertes pour améliorer les modèles construits afin de peut-être gagner en précision. Le regroupement des modalités parfois nombreuses au sein d'une même variable ou un traitement valorisé de l'information portée par la tranche horaire de l'accident mériteraient sans doute d'enrichir nos modèles, en dépit de la lourdeur calculatoire qui en résulterait. Un choix plus restreint dans le nombre d'individus accidentés sera sans doute à utiliser conjointement à cet effet.
 
 \newpage
 
@@ -452,7 +450,7 @@ Nous choisissons donc de réaliser un premier tri sur ces variables et de garder
 
 \begin{table}[H]
 
-\caption{\label{tab:tablegrav}Effectifs des usagers par gravité
+\caption{\label{tab:tablegrav}Effectifs des usagers par gravité\\
 \textbf{Source des données :} Par les auteurs selon les données de 2019 du ministère de l'Intérieur.\\
 \textbf{Cohorte :} 130857 usagers.\\}
 \centering
@@ -468,7 +466,7 @@ Blessé léger & 52586\\
 \end{tabular}
 \end{table}
 
-\textbf{Lecture :} 54529 usagers sont ressortis indemnes d'un accident routier.
+\textbf{Lecture :} 54529 usagers sont ressortis indemnes d'un accident routier.\\
 \textbf{Commentaire :} Dans notre jeu de données, les usagers tués lors de l'accident sont sous-représentés avec 3413 individus contre 54529 individus pour les usagers indemnes.
 
 \hypertarget{ruxe9partition-des-usagers-par-catuxe9gorie-dusagers}{%
@@ -480,7 +478,7 @@ Blessé léger & 52586\\
 
 \begin{table}[H]
 
-\caption{\label{tab:tablecatu}Effectifs des usagers par catégorie d'usagers
+\caption{\label{tab:tablecatu}Effectifs des usagers par catégorie d'usagers\\
 \textbf{Source des données :} Par les auteurs selon les données de 2019 du ministère de l'Intérieur.\\
 \textbf{Cohorte :} 130857 usagers.\\}
 \centering
@@ -498,6 +496,8 @@ Passager & 23956\\
 \textbf{Lecture :} 95854 des usagers impliqués dans un accident routier sont conducteurs.\\
 \textbf{Commentaire :} La place d'usager la plus représentée est celle correspondant au conducteur avec 95854 usagers tandis que la place la moins représentée est celle des passagers avec 23956 usagers.
 
+\newpage
+
 \hypertarget{ruxe9partition-des-usagers-par-catuxe9gorie-trajet}{%
 \paragraph{Répartition des usagers par catégorie trajet}\label{ruxe9partition-des-usagers-par-catuxe9gorie-trajet}}
 
@@ -507,7 +507,7 @@ Passager & 23956\\
 
 \begin{table}[H]
 
-\caption{\label{tab:tabletrajet}Effectifs des usagers par type de trajet
+\caption{\label{tab:tabletrajet}Effectifs des usagers par type de trajet\\
 \textbf{Source des données :} Par les auteurs selon les données de 2019 du ministère de l'Intérieur.\\
 \textbf{Cohorte :} 130857 usagers.\\}
 \centering
@@ -528,15 +528,18 @@ Promenade - Loisirs & 51130\\
 \end{table}
 
 \textbf{Lecture :} 17455 usagers sont impliqués dans un accident corporel routier lors du trajet Domicile - Travail.\\
-\textbf{Commentaire :} Selon ce tableau d'effectifs, nous remarquons que le type de trajet pour lequel il y a le plus d'usagers impliqués dans les accidents est celui correspondant aux promenades et loisirs tandis que le type de trajet pour lequel nous avons le plus petit effectif est celui correspondant aux trajets domicile -- école.\\
-\#\#\#\# Répartition des usagers par condition atmosphérique
+\textbf{Commentaire :} Selon ce tableau d'effectifs, nous remarquons que le type de trajet pour lequel il y a le plus d'usagers impliqués dans les accidents est celui correspondant aux promenades et loisirs tandis que le type de trajet pour lequel nous avons le plus petit effectif est celui correspondant aux trajets domicile -- école.
+
+\hypertarget{ruxe9partition-des-usagers-par-condition-atmosphuxe9rique}{%
+\paragraph{Répartition des usagers par condition atmosphérique}\label{ruxe9partition-des-usagers-par-condition-atmosphuxe9rique}}
+
 
 
 
 
 \begin{table}[H]
 
-\caption{\label{tab:tablecond}Effectifs des usagers par condition atmosphérique
+\caption{\label{tab:tablecond}Effectifs des usagers par condition atmosphérique\\
 \textbf{Source des données :} Par les auteurs selon les données de 2019 du ministère de l'Intérieur.\\
 \textbf{Cohorte :} 130857 usagers.\\}
 \centering
@@ -561,6 +564,8 @@ Temps couvert & 4857\\
 \textbf{Lecture :} 103725 usagers sont impliqués dans un accident corporel routier en condition atmosphérique normale.\\
 \textbf{Commentaire :} Selon ce tableau d'effectifs, nous remarquons que le type de condition atmosphérique pour lequel il y a le plus d'usagers impliqués dans les accidents est celui correspondant à la condition atmosphérique ``normale'' tandis que le type de condition atmosphérique pour lequel nous avons le plus petit effectif est celui correspondant à la condition ``Vent Fort - Tempête.''
 
+\newpage
+
 \hypertarget{ruxe9partition-des-usagers-par-surface}{%
 \paragraph{Répartition des usagers par surface}\label{ruxe9partition-des-usagers-par-surface}}
 
@@ -570,7 +575,7 @@ Temps couvert & 4857\\
 
 \begin{table}[H]
 
-\caption{\label{tab:tablesurf}Effectifs des usagers par surface
+\caption{\label{tab:tablesurf}Effectifs des usagers par surface\\
 \textbf{Source des données :} Par les auteurs selon les données de 2019 du ministère de l'Intérieur.\\
 \textbf{Cohorte :} 130857 usagers.\\}
 \centering
@@ -595,6 +600,8 @@ Corps gras ou huile & 194\\
 \textbf{Lecture :} 104852 usagers sont impliqués dans un accident corporel routier sur surface normale.\\
 \textbf{Commentaire :} Selon ce tableau d'effectifs, nous remarquons que le type de surface pour lequel il y a le plus d'usagers impliqués dans les accidents est celui correspondant à la surface ``normale'' tandis que le type de surface pour lequel nous avons le plus petit effectif est celui correspondant à la surface ``Boue.''
 
+\newpage
+
 \hypertarget{ruxe9partition-des-usagers-par-catuxe9gorie-de-route}{%
 \paragraph{Répartition des usagers par catégorie de route}\label{ruxe9partition-des-usagers-par-catuxe9gorie-de-route}}
 
@@ -604,7 +611,7 @@ Corps gras ou huile & 194\\
 
 \begin{table}[H]
 
-\caption{\label{tab:tablecatr}Effectifs des usagers par catégorie de route
+\caption{\label{tab:tablecatr}Effectifs des usagers par catégorie de route\\
 \textbf{Source des données :} Par les auteurs selon les données de 2019 du ministère de l'Intérieur.\\
 \textbf{Cohorte :} 130857 usagers.\\}
 \centering
@@ -624,15 +631,6 @@ Autre & 1108\\
 \bottomrule
 \end{tabular}
 \end{table}
-
-\begin{verbatim}
-              Autoroute               Nationale          Départementale 
-                  15765                    9416                   46099 
-        Voie Communales      Hors réseau public                 Parking 
-                  54625                     131                     815 
-Route metropole urbaine                   Autre 
-                   2898                    1108 
-\end{verbatim}
 
 \textbf{Lecture :} 15765 usagers sont impliqués dans un accident corporel routier sur autoroute.\\
 \textbf{Commentaire :} Selon ce tableau d'effectifs, nous remarquons que la catégorie de route pour laquelle il y a le plus d'usagers impliqués dans les accidents est celui correspondant à la catégorie ``Voie communales'' tandis que la catégorie pour laquelle nous avons le plus petit effectif est celle correspondant à la catégorie ``Hors réseau public.''
@@ -732,7 +730,7 @@ Route metropole urbaine                   Autre
 \caption{Graphiques à bâtons sur les profils lignes, regroupement par type de trajet\\
 \textbf{Source des données :} Par les auteurs selon les données de 2019 du ministère de l'Intérieur.\\
 \textbf{Cohorte :} 130857 usagers.\\
-\textbf{Lecture :} 42\% des usagers ayant un eu un accident alors que la condition atmosphérique était normale en ressortent indemnes.
+\textbf{Lecture :} 46\% des usagers ayant un eu un accident sur autoroute en ressortent indemnes.\\
 \textbf{Commentaire :} Globalement, les usagers sont répartis de la même manière selon la gravité pour chaque type de route, avec en majorité des usagers qui ressortent indemnes ou blessés légèrement de l'accident. Ce sont sur les routes de types Départementales ou Hors réseau public que nous retrouvons le plus d'usagers blessés hospitalisés avec environ 25\% des usagers de ces deux catégories.}\label{fig:barplotroute}
 \end{figure}
 
@@ -756,7 +754,7 @@ Route metropole urbaine                   Autre
 \caption{Graphiques à bâtons sur les profils lignes, regroupement par type de trajet\\
 \textbf{Source des données :} Par les auteurs selon les données de 2019 du ministère de l'Intérieur.\\
 \textbf{Cohorte :} 130857 usagers.\\
-\textbf{Lecture :} 42\% des usagers ayant un eu un accident alors que la condition atmosphérique était normale en ressortent indemnes.\\
+\textbf{Lecture :} 42\% des usagers ayant un eu un accident alors que la surface était normale en ressortent indemnes.\\
 \textbf{Commentaire :} Globalement, les usagers sont répartis de la même manière selon la gravité pour chaque type de surface, avec en majorité des usagers qui ressortent indemnes ou blessés légèrement de l'accident. Cependant, lorsque la surface est de la boue, la gravité de l'accident est plus importante. En effet, 40\% des usagers ayant eu un accident routier sur de la boue en ressortent blessés hospitalisés et 4\% en ressortent tués.}\label{fig:barplotsurface}
 \end{figure}
 
@@ -764,9 +762,6 @@ Route metropole urbaine                   Autre
 
 \hypertarget{classification-des-individus}{%
 \subsection{Classification des individus}\label{classification-des-individus}}
-
-\hypertarget{choix-var}{%
-\subsubsection{Choix du nombre de variables explicatives}\label{choix-var}}
 
 \hypertarget{div-train-test}{%
 \subsubsection{Méthode de choix des données train/test}\label{div-train-test}}
@@ -796,7 +791,7 @@ test & 39258 & 30\\
 \subsubsection{Méthode de régression logistique}\label{reg-log}}
 
 \begin{verbatim}
-[1] 0.3360232
+[1] 0.3367084
 \end{verbatim}
 
 \begin{figure}[ht!]
@@ -805,12 +800,12 @@ test & 39258 & 30\\
 
 }
 
-\caption{Matrice de confusion représentant les résultats de la prédiction par régression logistique multinomiale.
+\caption{Matrice de confusion représentant les résultats de la prédiction par régression logistique multinomiale.\\
 \textbf{Source des données :} Par les auteurs selon les données de 2019 du ministère de l'Intérieur.\\
 \textbf{Lecture :} Le modèle prédictif donne 13474 bonnes prédiction pour la modalité ``Indemne.''}\label{fig:confusionlog}
 \end{figure}
 
-La méthode de régression logistique multinomiale donne une erreur de prédiction de 33.6\% déterminée par cross-validation.
+La méthode de régression logistique multinomiale donne une erreur de prédiction de 33.67\% déterminée par cross-validation.
 On représente la répartition des bonnes et mauvaises prédictions sur le graphe suivant.
 
 
@@ -822,9 +817,15 @@ On représente la répartition des bonnes et mauvaises prédictions sur le graph
 \hypertarget{xgboost}{%
 \subsubsection{Méthode XGBoost}\label{xgboost}}
 
-La méthode XGBoost otpimale donne un taux d'erreur de 0.35\%, on obtient donc un modèle prédictif donnant 0.65\% de bonnes prédictions. Pour que cette méthode soit optimale nous avons donné à notre algorithme les paramètres suivants :\\
-* Profondeur maximale des arbres : 10\\
-* Nombre maximal d'itérations : 50.
+La méthode XGBoost otpimale donne un taux d'erreur de 0.35\%, on obtient donc un modèle prédictif donnant 0.65\% de bonnes prédictions. Pour que cette méthode soit optimale nous avons donné à notre algorithme les paramètres suivants :
+
+\begin{itemize}
+\tightlist
+\item
+  Profondeur maximale des arbres : 10\\
+\item
+  Nombre maximal d'itérations : 50.
+\end{itemize}
 
 On représente la répartition des bonnes et mauvaises prédictions sur le graphe suivant.
 
@@ -848,9 +849,15 @@ On représente la répartition des bonnes et mauvaises prédictions sur le graph
 \hypertarget{random-forest}{%
 \subsubsection{Méthode Random Forest}\label{random-forest}}
 
-La méthode Random Forest donne un taux d'erreur de 0.32\%, on obtient dans un modèle prédictif donnant 0.68\% de bonnes prédictions. Pour que cette méthode soit optimale nous avons donné à notre algorithme les paramètres suivants :\\
-* Nombre d'arbres : 100\\
-* Nombre de variables échantillonnées au hasard comme candidats à chaque coupure : 2.
+La méthode Random Forest donne un taux d'erreur de 0.32\%, on obtient dans un modèle prédictif donnant 0.68\% de bonnes prédictions. Pour que cette méthode soit optimale nous avons donné à notre algorithme les paramètres suivants :
+
+\begin{itemize}
+\tightlist
+\item
+  Nombre d'arbres : 100\\
+\item
+  Nombre de variables échantillonnées au hasard comme candidats à chaque coupure : 2.
+\end{itemize}
 
 On représente la répartition des bonnes et mauvaises prédictions sur le graphe suivant.
 
