@@ -122,11 +122,11 @@
 
   \title{Prédiction de la gravité des accidents corporels routiers}
     \author{}
-      \date{24 janvier 2022}
+      \date{29 janvier 2022}
 
 %\email{}
 \logouniv{logo_URCA.pdf}
-\date{24 janvier 2022}
+\date{29 janvier 2022}
 \diplome{Master Statistique pour l'Évaluation et la Prévision, 2\up{ème} année}
 \anac{2021 - 2022}
 \moduleref{SEP0932 - SEP0953}
@@ -202,6 +202,42 @@ Nous avons réaliser une étude descriptive des usagers impliqués dans ces acci
 
 
 
+\begin{verbatim}
+## Warning: le package 'knitr' a été compilé avec la version R 4.1.2
+\end{verbatim}
+
+\begin{verbatim}
+Warning: le package 'stringr' a été compilé avec la version R 4.1.2
+\end{verbatim}
+
+\begin{verbatim}
+Warning: le package 'kableExtra' a été compilé avec la version R 4.1.2
+\end{verbatim}
+
+\begin{verbatim}
+Warning: le package 'tibble' a été compilé avec la version R 4.1.2
+\end{verbatim}
+
+\begin{verbatim}
+Warning: le package 'readr' a été compilé avec la version R 4.1.2
+\end{verbatim}
+
+\begin{verbatim}
+Warning: le package 'randomForest' a été compilé avec la version R 4.1.2
+\end{verbatim}
+
+\begin{verbatim}
+Warning: le package 'caret' a été compilé avec la version R 4.1.2
+\end{verbatim}
+
+\begin{verbatim}
+Warning: le package 'fastDummies' a été compilé avec la version R 4.1.2
+\end{verbatim}
+
+\begin{verbatim}
+Warning: le package 'xgboost' a été compilé avec la version R 4.1.2
+\end{verbatim}
+
 \newpage
 
 \hypertarget{introduction}{%
@@ -235,8 +271,8 @@ Pour cela, nous avons choisi un ensemble de base de données issues du site \hre
 
 \caption{Effectifs des accidents par jour sur l'année 2019\\
 \textbf{Source des données :} Par les auteurs selon les données de 2019 du ministère de l'Intérieur.\\
-\textbf{Cohorte :} 58838 accidents.\\
-\textbf{Lecture :} Il y a eu 254 accidents le 20 décembre 2019.}\label{fig:calendrier}
+\textbf{Cohorte :} 57855 accidents.\\
+\textbf{Lecture :} Il y a eu 252 accidents le 20 décembre 2019.}\label{fig:calendrier}
 \end{figure}
 
 \newpage
@@ -378,10 +414,10 @@ Nous choisissons donc de réaliser un premier tri sur ces variables et de garder
 \toprule
 \textbf{Var1} & \textbf{Freq}\\
 \midrule
-\cellcolor{gray!6}{Indemne} & \cellcolor{gray!6}{55314}\\
-Tué & 3496\\
-\cellcolor{gray!6}{Blessé hospitalisé} & \cellcolor{gray!6}{20858}\\
-Blessé léger & 53307\\
+\cellcolor{gray!6}{Indemne} & \cellcolor{gray!6}{54529}\\
+Tué & 3413\\
+\cellcolor{gray!6}{Blessé hospitalisé} & \cellcolor{gray!6}{20329}\\
+Blessé léger & 52586\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -399,9 +435,9 @@ Blessé léger & 53307\\
 \toprule
 \textbf{Var1} & \textbf{Freq}\\
 \midrule
-\cellcolor{gray!6}{Conducteur} & \cellcolor{gray!6}{97355}\\
-Passager & 24356\\
-\cellcolor{gray!6}{Piéton} & \cellcolor{gray!6}{11264}\\
+\cellcolor{gray!6}{Conducteur} & \cellcolor{gray!6}{95854}\\
+Passager & 23956\\
+\cellcolor{gray!6}{Piéton} & \cellcolor{gray!6}{11047}\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -427,7 +463,7 @@ Passager & 24356\\
 
 \caption{Graphiques à bâtons sur les profils lignes, regroupement par catégorie d'usagers\\
 \textbf{Source des données :} Par les auteurs selon les données de 2019 du ministère de l'Intérieur.\\
-\textbf{Cohorte :} 132975 usagers.\\
+\textbf{Cohorte :} 130857 usagers.\\
 \textbf{Lecture :} 64\% des piétons sont des blessés légers.}\label{fig:barplotcatu}
 \end{figure}
 
@@ -449,7 +485,7 @@ Passager & 24356\\
 
 \caption{Graphiques à bâtons sur les profils lignes, regroupement par type de trajet\\
 \textbf{Source des données :} Par les auteurs selon les données de 2019 du ministère de l'Intérieur.\\
-\textbf{Cohorte :} 132975 usagers.\\
+\textbf{Cohorte :} 130857 usagers.\\
 \textbf{Lecture :} 65\% des usagers ayant un eu un accident lors d'un trajet d'utilisation professionnelle en ressortent indemnes.}\label{fig:barplottrajet}
 \end{figure}
 \newpage
@@ -470,7 +506,7 @@ Passager & 24356\\
 
 \caption{Graphiques à bâtons sur les profils lignes, regroupement par type de trajet\\
 \textbf{Source des données :} Par les auteurs selon les données de 2019 du ministère de l'Intérieur.\\
-\textbf{Cohorte :} 132975 usagers.\\
+\textbf{Cohorte :} 130857 usagers.\\
 \textbf{Lecture :} 42\% des usagers ayant un eu un accident alors que la condition atmosphérique était normale en ressortent indemnes.}\label{fig:barplotatm}
 \end{figure}
 
@@ -490,7 +526,7 @@ Passager & 24356\\
 
 \caption{Graphiques à bâtons sur les profils lignes, regroupement par type de trajet\\
 \textbf{Source des données :} Par les auteurs selon les données de 2019 du ministère de l'Intérieur.\\
-\textbf{Cohorte :} 132975 usagers.\\
+\textbf{Cohorte :} 130857 usagers.\\
 \textbf{Lecture :} 42\% des usagers ayant un eu un accident alors que la condition atmosphérique était normale en ressortent indemnes.}\label{fig:barplotroute}
 \end{figure}
 
@@ -510,7 +546,7 @@ Passager & 24356\\
 
 \caption{Graphiques à bâtons sur les profils lignes, regroupement par type de trajet\\
 \textbf{Source des données :} Par les auteurs selon les données de 2019 du ministère de l'Intérieur.\\
-\textbf{Cohorte :} 132975 usagers.\\
+\textbf{Cohorte :} 130857 usagers.\\
 \textbf{Lecture :} 42\% des usagers ayant un eu un accident alors que la condition atmosphérique était normale en ressortent indemnes.}\label{fig:barplotsurface}
 \end{figure}
 
@@ -520,14 +556,72 @@ Passager & 24356\\
 \hypertarget{choix-du-nombre-de-variables-explicatives}{%
 \subsubsection{Choix du nombre de variables explicatives}\label{choix-du-nombre-de-variables-explicatives}}
 
+\hypertarget{muxe9thode-de-choix-des-donnuxe9es-traintest}{%
+\subsubsection{Méthode de choix des données train/test}\label{muxe9thode-de-choix-des-donnuxe9es-traintest}}
+
+En vue de l'apprentissage des nos algorithmes de machine learning pour la prédiction, il est essentiel d'utiliser une méthode qui va choisir les données d'apprentissage et les données de test.\\
+Ici nous divisons aléatoirement notre base en 2, le tableau ci-dessous décrit cette division.
+
+
+
+\begin{table}[H]
+
+\caption{\label{tab:tabletraintest}Repartition des observation en vue de l'apprentissage}
+\centering
+\begin{tabular}[t]{lrr}
+\toprule
+\textbf{Base} & \textbf{Nb\_obs} & \textbf{Pourcentage}\\
+\midrule
+\cellcolor{gray!6}{train} & \cellcolor{gray!6}{91599} & \cellcolor{gray!6}{70}\\
+test & 39258 & 30\\
+\bottomrule
+\end{tabular}
+\end{table}
+
 \hypertarget{muxe9thode-de-ruxe9gression-logistique}{%
 \subsubsection{Méthode de régression logistique}\label{muxe9thode-de-ruxe9gression-logistique}}
 
 \hypertarget{muxe9thode-xgboost}{%
 \subsubsection{Méthode XGBoost}\label{muxe9thode-xgboost}}
 
+\begin{figure}[ht!]
+
+{\centering \includegraphics{Prediction_Gravite_files/figure-latex/confusionxgb-1} 
+
+}
+
+\caption{Matrice de confusion représentant les résultats de la prédiction XGBoost\\
+\textbf{Source des données :} Par les auteurs selon les données de 2019 du ministère de l'Intérieur.\\
+\textbf{Lecture :} Le modèle prédictif donne 13479 bonnes prédiction pour la modalité ``Indemne.''}\label{fig:confusionxgb}
+\end{figure}
+
+La méthode XGBoost donne un taux d'erreur de 0.36\%.\\
+On représente la répartition des bonnes et mauvaises prédictions sur le graphe suivant.
+
+
+
+
+
 \hypertarget{muxe9thode-random-forest}{%
 \subsubsection{Méthode Random Forest}\label{muxe9thode-random-forest}}
+
+\begin{figure}[ht!]
+
+{\centering \includegraphics{Prediction_Gravite_files/figure-latex/confusionrf-1} 
+
+}
+
+\caption{Matrice de confusion représentant les résultats de la prédiction Random Forest\\
+\textbf{Source des données :} Par les auteurs selon les données de 2019 du ministère de l'Intérieur.\\
+\textbf{Lecture :} Le modèle prédictif donne 13479 bonnes prédiction pour la modalité ``Indemne.''}\label{fig:confusionrf}
+\end{figure}
+
+La méthode Random Forest donne un taux d'erreur de 0.33\%.\\
+On représente la répartition des bonnes et mauvaises prédictions sur le graphe suivant.
+
+
+
+
 
 \newpage
 

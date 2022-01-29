@@ -50,7 +50,10 @@ library("tidyverse")
 library("questionr")
 library("FactoMineR")
 library("factoextra")
+library("MASS")
 library('nnet')
+library('forcats')
+library('doParallel')
 library('randomForest')
 library('caret')
 library('fastDummies')
@@ -61,17 +64,15 @@ library('xgboost')
 ########## MISE EN PLACE DE LA BASE
 
 ### Chargement de l'emplacement
-setwd("~/Documents/Université/Master SEP/M2/S1/SEP0953 - Conf, Business/Cousin/AccidentsRoutiers")
-
-
+#setwd("~/Documents/Université/Master SEP/M2/S1/SEP0953 - Conf, Business/Cousin/AccidentsRoutiers")
 
 ### Import des données
-carac <- read.csv2(file="data/caracteristiques-2019.csv")
-lieux <- read.csv2(file="data/lieux-2019.csv")
-usagers <- read.csv2(file="data/usagers-2019.csv")
-vehic <- read.csv2(file="data/vehicules-2019.csv")
+carac <- read.csv2(file="~/AccidentsRoutiers/data/caracteristiques-2019.csv")
+lieux <- read.csv2(file="~/AccidentsRoutiers/data/lieux-2019.csv")
+usagers <- read.csv2(file="~/AccidentsRoutiers/data/usagers-2019.csv")
+vehic <- read.csv2(file="~/AccidentsRoutiers/data/vehicules-2019.csv")
 
-### Trie dans les variables
+### Tri dans les variables
 # Base caracteritisques
 var_carac <- c("Num_Acc","jour","mois","hrmn","lum","com","agg","int","atm","col")
 carac <- carac[,var_carac]
@@ -159,7 +160,7 @@ usagers$sexe <- as.factor(usagers$sexe)
 # type de trajet
 usagers$trajet <- as.factor(usagers$trajet)
 
-### Valeurs manquantes et abérrantes
+### Valeurs manquantes et aberrantes
 # Base caracteristiques
 va <- which(carac$atm==-1)
 va2 <- which(carac$col==-1)
@@ -494,15 +495,50 @@ ggplot(df, aes(x = surf, fill = grav)) +
 ## Classification des individus
 ### Choix du nombre de variables explicatives
 
+
 ```{r}
 ### On passe de 4 à 3 modalités pour grav (hospitalisé et tué sont regroupés)
 df2$grav[df2$grav=="2"] <- "3"
 df2$grav[df2$grav=="4"] <- "2"
 df2$grav <- factor(df2$grav,exclude=NULL)
+df2$grav<-droplevels.factor(df2$grav)
+### On supprime les identifiants, la date (saisonnalité déjà étudiée), le numéro d'immatriculation et commune
+df2<-df2[,-c(1,2,5,20)]
 ```
 
 ```{r}
-### En attente du modèle AIC
+### En attente du modèle AIC sur un échantillon réduit de 10000 pris au hasard parmi les 130857 observations
+
+set.seed(123)
+
+red<-sample(1:130857, size = 10000, replace = FALSE)
+dfred<-df2[red,]
+rownames(dfred)<-1:10000
+
+#set.seed(1654) si on veut refaire base de test et train
+#train_id <- sample(1:10000, size = 0.7*10000, replace = FALSE)
+#data_train <- dfred[train_id,]
+#data_test <- dfred[-train_id,]
+
+
+modele.redcomp<-multinom(formula = grav ~ .,data = dfred, model = TRUE, maxit = 600)   # pour info 22% d'erreur en testant sur une base_test de 7000
+modele.redtriv<-multinom(formula = grav ~ 1,data = dfred, model = TRUE, maxit = 600) 
+
+modele.backward <- step(object = modele.redcomp, 
+                       scope = list(lower = grav ~ 1, upper = formula(modele.redcomp$model)), 
+                       direction = "backward",steps=20)
+modele.backward 
+
+# en forward Idem mais plus long.... 
+#modele.forward <- step(object = modele.redtriv, 
+#                       scope = list(lower = grav ~ 1, upper = formula(modele.redcomp$model)), 
+#                       direction = "forward",steps=10)# pas grand changement avec base test 7000
+#modele.forward
+# formula(modele.forward$model)
+# on se rend compte qu'en enlevant les heures et min ça ne change pas grand chose mais 
+# ça allège le calcul
+
+
 var <- c('grav','catv','catu','obsm','agg','col','obs','catr','sexe','manv','trajet','circ','situ',
          'nbv','vma')
 dtf <- df2[,var]
@@ -533,6 +569,78 @@ kable(table_traintest, format = 'latex', caption = "(ref:tabletraintest)", bookt
 
 ### Méthode de régression logistique
 
+```{r, include=FALSE}
+# Encodage
+N <- nrow(dtf)
+set.seed(123)
+train_id <- sample(1:N, size = 0.7*N, replace = FALSE)
+data_train <- dtf[train_id,]
+data_test <- dtf[-train_id,]
+
+# Prédiction et erreur de prédiction
+
+
+modele.optimal<-multinom(formula = grav ~ ., data = data_train, model = TRUE, maxit = 600)
+
+pred.moda.modele.optimal<- predict(object = modele.optimal , newdata = data_test)
+erreur.modele.optimal <- mean(!(pred.moda.modele.optimal == data_test$grav))
+erreur.modele.optimal
+
+# 33.6% avec ce modèle optimal; avec toutes les variables (modèle complet): 33,46% code ci-dessous
+#modele.complet<-multinom(formula = grav ~ ., data = df2[train_id,], model = TRUE, maxit = 600)
+#pred.moda.modele.complet<- predict(object = modele.complet , newdata =  df2[-train_id,])
+#erreur.modele.complet <- mean(!(pred.moda.modele.complet == df2[-train_id,]$grav))
+#erreur.modele.complet
+
+# Estimation erreur par cross-validation (calculs très lourds et donc parallélisés)
+
+errclass<-function(l=0.7){
+  train_id<-sample(1:N,size=l*N,replace=FALSE)
+  data_train<-dtf[train_id,]
+  data_test<-dtf[-train_id,]
+  modele.optimal <- multinom(formula = grav ~ catv + catu + obsm + agg + col + obs + 
+                               catr + sexe + manv + trajet + circ + situ + nbv + vma, data = data_train, model = TRUE, maxit = 500)
+  pred.moda.modele.optimal <- predict(object = modele.optimal, newdata = data_test)
+  erreur.modele.optimal<- mean(!(pred.moda.modele.optimal == data_test$grav))
+  return(erreur.modele.optimal)
+}
+
+cl <- detectCores() %>% -1 %>% makeCluster
+registerDoParallel(cl)
+
+resultats<-foreach(e=1:10,.packages=c("nnet"),.combine=c) %dopar% {errclass(0.7)}
+print(mean(resultats))     #33,6%
+
+stopImplicitCluster()
+
+# Matrice de confusion
+conflog <- confusionMatrix(data = factor(pred.moda.modele.optimal), reference = data_test$grav)
+```
+
+
+```{r confusionlog, fig.cap = "(ref:confusionlog)", message = FALSE}
+table <- data.frame(conflog$table)
+plotTable <- table %>%
+  mutate(goodbad = ifelse(table$Prediction == table$Reference, "good", "bad")) %>%
+  group_by(Reference) %>%
+  mutate(prop = Freq/sum(Freq))
+ggplot(data = plotTable, mapping = aes(x = Reference, y = Prediction, fill = goodbad, alpha = prop)) +
+  geom_tile() +
+  geom_text(aes(label = Freq), vjust = .5, fontface  = "bold", alpha = 1) +
+  scale_fill_manual(values = c(good = "green", bad = "red")) +
+  theme_bw() +
+  xlim(rev(levels(table$Reference))) +
+  scale_y_discrete(labels=c("Indemne", "Blessé leger", "Tué ou hospitalisé")) +
+  scale_x_discrete(labels=c("Indemne", "Blessé leger", "Tué ou hospitalisé")) +
+  labs(fill = "Prédiction")
+```
+
+La méthode de régression logistique multinomiale donne une erreur de prédiction de `r round(100*mean(resultats),2)`% déterminée par cross-validation.
+On représente la répartition des bonnes et mauvaises prédictions sur le graphe suivant.  
+
+(ref:confusionlog) Matrice de confusion représentant les résultats de la prédiction par régression logistique multinomiale.
+__Source des données :__ Par les auteurs selon les données de 2019 du ministère de l’Intérieur.  
+__Lecture :__ Le modèle prédictif donne 13474 bonnes prédiction pour la modalité "Indemne".  
 
 ### Méthode XGBoost
 
@@ -568,7 +676,7 @@ ggplot(data = plotTable, mapping = aes(x = Reference, y = Prediction, fill = goo
   xlim(rev(levels(table$Reference))) +
   scale_y_discrete(labels=c("Indemne", "Blessé leger", "Tué ou hospitalisé")) +
   scale_x_discrete(labels=c("Indemne", "Blessé leger", "Tué ou hospitalisé")) +
-  labs(fill = "Prediction")
+  labs(fill = "Prédiction")
 ```
 
 
