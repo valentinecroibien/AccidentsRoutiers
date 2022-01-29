@@ -240,7 +240,17 @@ La répartition des individus selon la gravité et leur catégorie est disponibl
 
 
 \newpage
-# Prédiction de la gravité des accidents corporels routiers  
+# Prédiction de la gravité des accidents corporels routiers
+
+Rappelons que l'objectif est de prédire la gravité des accidents de la route à l'aide de différentes variables relevées sur chaque accident ayant eu lieu en France en 2019. Grâce à ce modèle de prédiction recherché nous voulons prédire la gravité d'un accident en ayant connaissance des certains facteurs pour ainsi determiner ce qui influence cette gravité. Pour se faire nous avons determiné la gravité des dommages corporels des usagers impliqués dans l'accident sur une échelle entre 1 et 3 tel que :  
+* 1 : l'usager est indemne  
+* 2 : l'usager est blessé leger  
+* 3 : l'usager est hospitalisé ou décédé  
+Le fait de regrouper "hospitalisé" et "décédé" est volontaire dans le but de rendre le modèle optimal.  
+
+La première chose à faire est de trouver quel modèle explique le mieux notre variable à prèdire, c'est à dire quelles sont les variables, parmis toutes celles selectionnées, à choisir pour obtenir les meilleurs résultats de prédiction.
+
+
 
 Rappelons que l'objectif est de prédire la gravité des accidents de la route à l'aide de différentes variables relevées sur chaque accident ayant eu lieu en France en 2019. Grâce à ce modèle de prédiction recherché nous voulons prédire la gravité d'un accident en ayant connaissance des certains facteurs pour ainsi determiner ce qui influence cette gravité. Pour se faire nous avons determiné la gravité des dommages corporels des usagers impliqués dans l'accident sur une échelle entre 1 et 3 tel que :  
 
@@ -603,6 +613,11 @@ data_train <- dtf[train_id,]
 data_test <- dtf[-train_id,]
 ```
 
+
+
+
+
+
 ### Méthode de choix des données train/test
 
 En vue de l'apprentissage des nos algorithmes de machine learning pour la prédiction, il est essentiel d'utiliser une méthode qui va choisir les données d'apprentissage et les données de test.  
@@ -703,7 +718,10 @@ err_xg
 conf <- confusionMatrix(data = factor(pred_xg), reference = Y_test$grav)
 ```
 
-La méthode XGBoost donne un taux d'erreur de `r round(err_xg,2)`%.  
+La méthode XGBoost otpimale donne un taux d'erreur de `r round(err_xg,2)`%, on obtient donc un modèle prédictif donnant `r 1 - round(err_xg,2)`% de bonnes prédictions. Pour que cette méthode soit optimale nous avons donné à notre algorithme les paramètres suivants :  
+* Profondeur maximale des arbres : 10  
+* Nombre maximal d'itérations : 50.
+
 On représente la répartition des bonnes et mauvaises prédictions sur le graphe suivant.  
 
 ```{r confusionxgb, fig.cap = "(ref:confusionxgb)", message = FALSE}
@@ -726,7 +744,7 @@ ggplot(data = plotTable, mapping = aes(x = Reference, y = Prediction, fill = goo
 
 (ref:confusionxgb) Matrice de confusion représentant les résultats de la prédiction XGBoost  
 __Source des données :__ Par les auteurs selon les données de 2019 du ministère de l’Intérieur.  
-__Lecture :__ Le modèle prédictif donne 13479 bonnes prédiction pour la modalité "Indemne".  
+__Lecture :__ Le modèle prédictif donne `r table['Freq'][1,1]` bonnes prédiction pour la modalité "Indemne".  
 
 \newpage  
 ### Méthode Random Forest  
@@ -747,7 +765,10 @@ err_rf <- mean(!(pred_rf == data_test$grav))
 conf <- confusionMatrix(data = pred_rf, reference = data_test$grav)
 ```
 
-La méthode Random Forest donne un taux d'erreur de `r round(err_rf,2)`%.  
+La méthode Random Forest donne un taux d'erreur de `r round(err_rf,2)`%, on obtient dans un modèle prédictif donnant `r 1 - round(err_rf,2)`% de bonnes prédictions. Pour que cette méthode soit optimale nous avons donné à notre algorithme les paramètres suivants :  
+* Nombre d'arbres : 100  
+* Nombre de variables échantillonnées au hasard comme candidats à chaque coupure : 2.
+
 On représente la répartition des bonnes et mauvaises prédictions sur le graphe suivant.  
 
 ```{r confusionrf, fig.cap = "(ref:confusionrf)", message = FALSE}
@@ -769,7 +790,7 @@ ggplot(data = plotTable, mapping = aes(x = Reference, y = Prediction, fill = goo
 
 (ref:confusionrf) Matrice de confusion représentant les résultats de la prédiction Random Forest  
 __Source des données :__ Par les auteurs selon les données de 2019 du ministère de l’Intérieur.  
-__Lecture :__ Le modèle prédictif donne 13323 bonnes prédiction pour la modalité "Indemne".  
+__Lecture :__ Le modèle prédictif donne `r table['Freq'][1,1]` bonnes prédiction pour la modalité "Indemne".  
 
 \newpage
 ## Dictionnaire des variables  
