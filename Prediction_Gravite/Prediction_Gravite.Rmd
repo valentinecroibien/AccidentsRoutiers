@@ -56,23 +56,18 @@ library('randomForest')
 library('caret')
 library('fastDummies')
 library('xgboost')
-library(here)
+library('here')
 ```
 
 ```{r}
 ########## MISE EN PLACE DE LA BASE
-
 ### Chargement de l'emplacement
 setwd(here())
-
-
-
 ### Import des données
 carac <- read.csv2(file="data/caracteristiques-2019.csv")
 lieux <- read.csv2(file="data/lieux-2019.csv")
 usagers <- read.csv2(file="data/usagers-2019.csv")
 vehic <- read.csv2(file="data/vehicules-2019.csv")
-
 ### Trie dans les variables
 # Base caracteritisques
 var_carac <- c("Num_Acc","jour","mois","hrmn","lum","com","agg","int","atm","col")
@@ -88,7 +83,6 @@ vehic <- vehic[,var_vehic]
 var_usagers <- c("Num_Acc","id_vehicule", "catu","grav",
                  "sexe","an_nais","trajet")
 usagers <- usagers[,var_usagers]
-
 ### Formatage des données
 ## Base caracteristiques
 # numero accident
@@ -160,7 +154,6 @@ usagers$grav <- as.factor(usagers$grav)
 usagers$sexe <- as.factor(usagers$sexe)
 # type de trajet
 usagers$trajet <- as.factor(usagers$trajet)
-
 ### Valeurs manquantes et abérrantes
 # Base caracteristiques
 va <- which(carac$atm==-1)
@@ -173,7 +166,6 @@ lieux <- lieux[-c(ab),]
 lieux$vma <- as.factor(lieux$vma)
 lieux$surf <- str_replace_all(lieux$surf, pattern = "-1", 
                               replacement = "9")
-
 ### Jointures
 carac_lieux <- inner_join(carac,lieux,by="Num_Acc")
 lieux_usagers <- inner_join(lieux,usagers,by="Num_Acc")
@@ -221,7 +213,6 @@ df %>%
                                     TRUE~num_semaine_an-min(num_semaine_an)+1)
                                     
          )->calend
-
 i <- which(calend$date == "2019-12-20")
 nb_acc_20_dec <- calend$nb_accidents[i]
 ```
@@ -312,9 +303,7 @@ Nous choisissons donc de réaliser un premier tri sur ces variables et de garder
 df$grav <- factor(df$grav, labels = c("Indemne",
                                                 "Tué", "Blessé hospitalisé", 
                                                 "Blessé léger"))
-
 tab_grav <- table(df$grav)
-
 kable(tab_grav, format = 'latex', caption = "(ref:captablegrav)", booktabs = TRUE) %>%
   kable_styling(latex_options = c('striped', 'HOLD_position')) %>%
   row_spec(0, bold = TRUE)
@@ -324,9 +313,7 @@ kable(tab_grav, format = 'latex', caption = "(ref:captablegrav)", booktabs = TRU
 (ref:captablecatu) Effectifs des usagers par catégorie d'usagers
 ```{r tablecatu, message = FALSE}
 df$catu <- factor(df$catu, labels = c("Conducteur","Passager", "Piéton"))
-
 tab_catu <- table(df$catu)
-
 kable(tab_catu, format = 'latex', caption = "(ref:captablecatu)", booktabs = TRUE) %>%
   kable_styling(latex_options = c('striped', 'HOLD_position')) %>%
   row_spec(0, bold = TRUE)
@@ -345,10 +332,8 @@ __Lecture :__ 64% des piétons sont des blessés légers.
 ```{r}
 # Tableau de contingence, Gravité de l'accident vs catégorie de l'usager
 tab_grav_catu <- table(df$catu, df$grav)
-
 # Profils lignes, pour comparer les modalités de la gravité
 profil_ligne_grav_catu <- lprop(tab_grav_catu, digits = 0, percent = TRUE)
-
 ```
 
 ```{r barplotcatu, fig.cap = "(ref:barplotcatu)"}
@@ -379,7 +364,6 @@ df$trajet <- factor(df$trajet, labels = c("Non renseigné",
                                                 "Utilisation professionnnelle",
                                                 "Promenade - Loisirs",
                                                 "Autre"))
-
 # Tableau de contingence, Gravité de l'accident vs trajet effectué
 tab_grav_trajet<- table(df$trajet, df$grav)
 # Profils lignes, pour comparer les modalités de la gravité
@@ -506,7 +490,6 @@ df2$grav <- factor(df2$grav,exclude=NULL)
 var <- c('grav','catv','catu','obsm','agg','col','obs','catr','sexe','manv','trajet','circ','situ',
          'nbv','vma')
 dtf <- df2[,var]
-
 ### Construction des bases test et train
 N <- nrow(dtf)
 set.seed(123)
@@ -524,7 +507,6 @@ Ici nous divisons aléatoirement notre base en 2, le tableau ci-dessous décrit 
 ```{r tabletraintest, message = FALSE}
 table_traintest <- data.frame(c('train','test'),c(nrow(data_train),nrow(data_test)),c(70,30))
 colnames(table_traintest) <- c('Base','Nb_obs','Pourcentage')
-
 kable(table_traintest, format = 'latex', caption = "(ref:tabletraintest)", booktabs = TRUE) %>%
   kable_styling(latex_options = c('striped', 'HOLD_position')) %>%
   row_spec(0, bold = TRUE)
@@ -554,6 +536,9 @@ err_xg
 conf <- confusionMatrix(data = factor(pred_xg), reference = Y_test$grav)
 ```
 
+La méthode XGBoost donne un taux d'erreur de `r round(err_xg,2)`%.  
+On représente la répartition des bonnes et mauvaises prédictions sur le graphe suivant.  
+
 ```{r confusionxgb, fig.cap = "(ref:confusionxgb)", message = FALSE}
 table <- data.frame(conf$table)
 plotTable <- table %>%
@@ -570,10 +555,6 @@ ggplot(data = plotTable, mapping = aes(x = Reference, y = Prediction, fill = goo
   scale_x_discrete(labels=c("Indemne", "Blessé leger", "Tué ou hospitalisé")) +
   labs(fill = "Prediction")
 ```
-
-
-La méthode XGBoost donne un taux d'erreur de `r round(err_xg,2)`%.  
-On représente la répartition des bonnes et mauvaises prédictions sur le graphe suivant.  
 
 (ref:confusionxgb) Matrice de confusion représentant les résultats de la prédiction XGBoost  
 __Source des données :__ Par les auteurs selon les données de 2019 du ministère de l’Intérieur.  
@@ -598,6 +579,9 @@ err_rf <- mean(!(pred_rf == data_test$grav))
 conf <- confusionMatrix(data = pred_rf, reference = data_test$grav)
 ```
 
+La méthode Random Forest donne un taux d'erreur de `r round(err_rf,2)`%.  
+On représente la répartition des bonnes et mauvaises prédictions sur le graphe suivant.  
+
 ```{r confusionrf, fig.cap = "(ref:confusionrf)", message = FALSE}
 table <- data.frame(conf$table)
 plotTable <- table %>%
@@ -614,9 +598,6 @@ ggplot(data = plotTable, mapping = aes(x = Reference, y = Prediction, fill = goo
   scale_x_discrete(labels=c("Indemne", "Blessé leger", "Tué ou hospitalisé")) +
   labs(fill = "Prediction")
 ```
-
-La méthode Random Forest donne un taux d'erreur de `r round(err_rf,2)`%.  
-On représente la répartition des bonnes et mauvaises prédictions sur le graphe suivant.  
 
 (ref:confusionrf) Matrice de confusion représentant les résultats de la prédiction Random Forest  
 __Source des données :__ Par les auteurs selon les données de 2019 du ministère de l’Intérieur.  
@@ -985,4 +966,3 @@ Le renseignement du caractère indique la présence et l’utilisation de l’é
     1 – Seul  
     2 – Accompagné  
     3 – En groupe
-
