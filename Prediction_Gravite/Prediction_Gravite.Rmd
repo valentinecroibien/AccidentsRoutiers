@@ -31,6 +31,7 @@ link-citations: yes
 toc : true
 toc_depth : 3
 ---
+
 ```{r, echo = FALSE}
 #Ce bloc configure quelques options d'affichage pour les blocs R
 library('knitr')
@@ -55,13 +56,14 @@ library('randomForest')
 library('caret')
 library('fastDummies')
 library('xgboost')
+library(here)
 ```
 
 ```{r}
 ########## MISE EN PLACE DE LA BASE
 
 ### Chargement de l'emplacement
-setwd("~/Documents/Université/Master SEP/M2/S1/SEP0953 - Conf, Business/Cousin/AccidentsRoutiers")
+setwd(here())
 
 
 
@@ -201,7 +203,7 @@ Pour cela, nous avons choisi un ensemble de base de données issues du site [Dat
 [^2]: On citera l’abaissement drastique du taux d’alcoolémie, l’instauration du permis à points, l’alourdissement du régime des contraventions, la politique de généralisations des radars et l’abaissement de la vitesse de 90 à 80km/h sur le réseau secondaire.
 [^3]: [Statistiques de la sécurité routière](http://www.securite-routiere.org/Fiches/statistiques/statfr.htm)
 
-
+\newpage
 # Études des accidents corporels routiers de 2019 en France  
 |           Dans un premier temps, nous avons étudié la répartition des usagers impliqués dans un accident corporel routier en 2019. Nous avons tout d'abord, étudié la répartition des usagers selon la gravité. Cette répartition est illustrée dans la table \@ref(tab:tablegrav). Ensuite, nous avons étudié la répartition des usagers selon leur catégorie d'usagers. Cette répartition est illustrée dnas la table \@ref(tab:tablecatu). Puis nous avons étudié la répartition des accidents sur l'année 2019. Cette répartition est visible dans la figure ci-dessous :  
 
@@ -239,13 +241,12 @@ ggplot(calend,mapping=aes(x=num_semaine_mois,y=fct_rev(nom_jour),fill = nb_accid
 ```
 
 
-\newpage
 |       Ensuite, nous avons étudié la répartition des usagers selon la gravité croisée avec d'autres variables telles que la catégorie de l'usager, le type de trajet effectué, l'état de la surface, les conditions atmosphériques, etc.  
 
 La répartition des individus selon la gravité et leur catégorie est disponible dans la figure \@ref(fig:barplotcatu).  
 
 
-
+\newpage
 # Prédiction de la gravité des accidents corporels routiers  
 
 \newpage
@@ -267,14 +268,11 @@ Nous disposons de quatre bases de données :
 
 ## Préparation des données 
 ### Jointure des 4 bases  
-
 Nous réalisons des jointures entre les différentes bases sur l'identifiant de l'accident mais également sur l'identifiant des véhicules impliqués. Nous n'avons finalement plus qu'un jeu de données à étudier dans lequel chaque ligne correspond à un usager impliqué dans un accident corporel routier en France en 2019.  
 
 ### Choix des variables  
-
 Cependant, en réalisant notre jointure, nous obtenons une base de données avec une soixantaine de variables.  
 Nous choisissons donc de réaliser un premier tri sur ces variables et de garder les variables suivantes :  
-
 * L'identifiant de l'accident,
 * La date,
 * L'heure et minute,
@@ -307,7 +305,6 @@ Nous choisissons donc de réaliser un premier tri sur ces variables et de garder
 * Le moteur du véhicule.
 
 ## Statistiques descriptives sur les usagers  
-
 ### Statistiques globales  
 #### Répartition des usagers par gravité  
 (ref:captablegrav) Effectifs des usagers par gravité
@@ -367,7 +364,7 @@ ggplot(df, aes(x = catu, fill = grav))+
   theme(legend.position="right", legend.text = element_text(size = 7), legend.title = element_text(size = 7), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 ```
 
-\newpage
+\newpage  
 #### Répartition des usagers selon leur trajet et la gravité  
 
 (ref:barplottrajet) Graphiques à bâtons sur les profils lignes, regroupement par type de trajet  
@@ -402,7 +399,8 @@ ggplot(df, aes(x = trajet, fill = grav))+
   theme(legend.position="right", legend.text = element_text(size = 7), legend.title = element_text(size = 7), 
         axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 ```
-\newpage
+
+\newpage  
 #### Répartition des usagers selon la condition atmosphérique et la gravité  
 
 (ref:barplotatm) Graphiques à bâtons sur les profils lignes, regroupement par type de trajet  
@@ -433,6 +431,7 @@ ggplot(df, aes(x = atm, fill = grav))+
   theme(legend.position="right", legend.text = element_text(size = 7), legend.title = element_text(size = 7), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 ```
 
+\newpage  
 #### Répartition des usagers selon la catégorie de route et la gravité  
 
 (ref:barplotroute) Graphiques à bâtons sur les profils lignes, regroupement par type de trajet  
@@ -462,6 +461,7 @@ ggplot(df, aes(x = catr, fill = grav)) +
   theme(legend.position="right", legend.text = element_text(size = 7), legend.title = element_text(size = 7), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 ```
 
+\newpage  
 #### Répartition des usagers selon la surface et la gravité  
 
 (ref:barplotsurface) Graphiques à bâtons sur les profils lignes, regroupement par type de trajet  
@@ -530,10 +530,10 @@ kable(table_traintest, format = 'latex', caption = "(ref:tabletraintest)", bookt
   row_spec(0, bold = TRUE)
 ```
 
-
+\newpage
 ### Méthode de régression logistique
 
-
+\newpage  
 ### Méthode XGBoost
 
 ```{r, include = FALSE}
@@ -579,7 +579,7 @@ On représente la répartition des bonnes et mauvaises prédictions sur le graph
 __Source des données :__ Par les auteurs selon les données de 2019 du ministère de l’Intérieur.  
 __Lecture :__ Le modèle prédictif donne 13479 bonnes prédiction pour la modalité "Indemne".  
 
-
+\newpage  
 ### Méthode Random Forest  
 
 ```{r, include = FALSE}
