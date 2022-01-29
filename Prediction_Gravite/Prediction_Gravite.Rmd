@@ -9,7 +9,7 @@ geometry:
   - bottom=2cm
 title: "Prédiction de la gravité des accidents corporels routiers"
 date: "`r format(Sys.time(), '%d %B %Y')`"
-abstract: "Dans ce compte-rendu, vous trouverez une étude sur les accidents corporels routiers de 2019 en France.\n Nous avons réaliser une étude descriptive des usagers impliqués dans ces accidents ainsi que la création d'un modèle de prédiction de la gravité de ces accidents."
+abstract: "Dans ce compte-rendu, vous trouverez une étude sur les accidents corporels routiers de 2019 en France.\n Nous avons réalisé une étude descriptive des usagers impliqués dans ces accidents ainsi que la création d'un modèle de prédiction de la gravité de ces accidents."
 anac: "2021 - 2022"
 diplome: "Master Statistique pour l'Évaluation et la Prévision, 2\\up{ème} année"
 moduleref: "SEP0932 - SEP0953 "
@@ -199,7 +199,7 @@ Pour cela, nous avons choisi un ensemble de base de données issues du site [Dat
 
 \newpage
 # Études des accidents corporels routiers de 2019 en France  
-|           Dans un premier temps, nous avons étudié la répartition des usagers impliqués dans un accident corporel routier en 2019. Nous avons tout d'abord, étudié la répartition des usagers selon la gravité. Cette répartition est illustrée dans la table \@ref(tab:tablegrav). Ensuite, nous avons étudié la répartition des usagers selon leur catégorie d'usagers. Cette répartition est illustrée dnas la table \@ref(tab:tablecatu). Puis nous avons étudié la répartition des accidents sur l'année 2019. Cette répartition est visible dans la figure ci-dessous :  
+|           Dans un premier temps, nous avons étudié la répartition des usagers impliqués dans un accident corporel routier en 2019. Nous avons tout d'abord, étudié la répartition des usagers selon la gravité. Cette répartition est illustrée dans la table \@ref(tab:tablegrav). Ensuite, nous avons étudié la répartition des usagers selon leur catégorie d'usagers. Cette répartition est illustrée dans la table \@ref(tab:tablecatu). Puis, nous avons étudié la répartition des accidents sur l'année 2019. Cette répartition est visible dans la figure ci-dessous :  
 
 ```{r}
 df %>%
@@ -232,26 +232,19 @@ ggplot(calend,mapping=aes(x=num_semaine_mois,y=fct_rev(nom_jour),fill = nb_accid
   geom_text(mapping = aes(label = num_jour_mois), size = 2)+
   labs(x="",y="")
 ```
+|       Comme nous pouvons le constater sur la figure ci-dessus, les mois de juin, juillet, septembre et octobre sont ceux où il y a le plus d'accident. En regardant plus attentivement le calendrier, nous pouvons remarquer que ce sont les vendredis que nous retrouvons les plus grands nombres d’accidents et les dimanches que nous retrouvons les plus petits effectifs d’accidents. De plus, nous pouvons également remarquer qu’il y a peu d’accidents les jours fériés, par exemple le 8 mai, le 15 août ou encore le 11 novembre.  
 
+|       De plus, nous remarquons dans un premier temps que la majorité des personnes impliquées dans un accident sont des conducteurs. Ce qui semble logique au vu de la définition même d'un accident corporel routier. En effet, pour être déterminé comme accident corporel de la circulation routière, il faut que l’accident soit relevé par les forces de l’ordre, qu’il implique au moins une victime, qu’il survienne sur une voie publique, privée, ou ouverte à la circulation publique et qu’il implique également au moins un véhicule. Dans un deuxième temps, nous constatons que les usagers ressortent majoritairement indemnes des accidents. Ensuite, nous remarquons que la plupart des accidents ont lieu lors des trajets _Promenade, loisirs_.  
 
-|       Ensuite, nous avons étudié la répartition des usagers selon la gravité croisée avec d'autres variables telles que la catégorie de l'usager, le type de trajet effectué, l'état de la surface, les conditions atmosphériques, etc.  
+|       Nous étudions la répartition des usagers selon la gravité croisée avec d'autres variables telles que la catégorie de l'usager, le type de trajet effectué, l'état de la surface, les conditions atmosphériques, etc. Nous pouvons tirer de cette étude que, globalement, les usagers ressortaient indemnes ou légèrement blessés des accidents corporels routiers. Très peu d’usagers, moins de 5%, étaient tués lors de l’accident. En croisant la gravité avec la catégorie de l’usager, nous remarquons que les usagers présents dans le véhicule sortent majoritairement indemnes ou légèrement blessés de l’accident. Contrairement aux idées reçues, il semblerait que la place du passager ne soit pas celle « du mort » puisque qu’il y a autant de tués dans cette catégorie que pour les conducteurs ou les piétons. De plus, les piétons sont, logiquement, plus rapidement grièvement blessés.  
 
-La répartition des individus selon la gravité et leur catégorie est disponible dans la figure \@ref(fig:barplotcatu).  
+|       Ensuite, lorsque nous croisons la gravité au type de trajet effectué, nous remarquons à nouveau que les usagers ressortent majoritairement indemnes ou légèrement blessés des accidents. Nous remarquons également que les types de trajets pour lesquels il y a le plus de tués sont les trajets promenade – loisirs ou courses – achats tandis et que le type de trajet pour lequel il y a le plus de personnes indemnes est celui de l’utilisation professionnelle.  
 
+|       Après cela, en croisant la gravité aux types de conditions atmosphériques, nous constatons que la gravité de l’accident est plus élevée lorsque les conditions météorologiques sont extrêmes, par exemple lorsque qu'il y a du vent fort ou des tempêtes.  
 
-\newpage
-# Prédiction de la gravité des accidents corporels routiers
+|       Maintenant que nous avons une idée générale de la gravité des accidents corporels routiers de 2019, nous allons tenter de classifier les usagers par niveau de gravité et de créer un modèle de prédiction de la gravité.  
 
-Rappelons que l'objectif est de prédire la gravité des accidents de la route à l'aide de différentes variables relevées sur chaque accident ayant eu lieu en France en 2019. Grâce à ce modèle de prédiction recherché nous voulons prédire la gravité d'un accident en ayant connaissance des certains facteurs pour ainsi determiner ce qui influence cette gravité. Pour se faire nous avons determiné la gravité des dommages corporels des usagers impliqués dans l'accident sur une échelle entre 1 et 3 tel que :  
-* 1 : l'usager est indemne  
-* 2 : l'usager est blessé leger  
-* 3 : l'usager est hospitalisé ou décédé  
-Le fait de regrouper "hospitalisé" et "décédé" est volontaire dans le but de rendre le modèle optimal.  
-
-La première chose à faire est de trouver quel modèle explique le mieux notre variable à prèdire, c'est à dire quelles sont les variables, parmis toutes celles selectionnées, à choisir pour obtenir les meilleurs résultats de prédiction.
-
-
-
+# Prédiction de la gravité des accidents corporels routiers  
 Rappelons que l'objectif est de prédire la gravité des accidents de la route à l'aide de différentes variables relevées sur chaque accident ayant eu lieu en France en 2019. Grâce à ce modèle de prédiction recherché nous voulons prédire la gravité d'un accident en ayant connaissance des certains facteurs pour ainsi determiner ce qui influence cette gravité. Pour se faire nous avons determiné la gravité des dommages corporels des usagers impliqués dans l'accident sur une échelle entre 1 et 3 tel que :  
 
 * 1 : l'usager est indemne  
@@ -306,7 +299,7 @@ Nous disposons de quatre bases de données :
 * Base véhicule : correspondant aux caractéristiques du véhicule prenant part à l'accident
 * Base usagers : correspondant aux caractéristiques des usagers faisant partie de l'accident
 
-## Préparation des données 
+## Préparation des données {#prepa-donnees}
 ### Jointure des 4 bases  
 Nous réalisons des jointures entre les différentes bases sur l'identifiant de l'accident mais également sur l'identifiant des véhicules impliqués. Nous n'avons finalement plus qu'un jeu de données à étudier dans lequel chaque ligne correspond à un usager impliqué dans un accident corporel routier en France en 2019.  
 
@@ -346,9 +339,9 @@ Nous choisissons donc de réaliser un premier tri sur ces variables et de garder
 * Le moteur du véhicule.
 
 ## Statistiques descriptives sur les usagers  
-### Statistiques globales  
+### Statistiques globales  {#stat-glob}
 #### Répartition des usagers par gravité  
-(ref:captablegrav) Effectifs des usagers par gravité
+(ref:captablegrav) Effectifs des usagers par gravité  
 __Source des données :__ Par les auteurs selon les données de 2019 du ministère de l’Intérieur.  
 __Cohorte :__ `r nrow(df)` usagers.  
 ```{r tablegrav, message = FALSE}
@@ -360,11 +353,11 @@ kable(tab_grav, format = 'latex', caption = "(ref:captablegrav)", booktabs = TRU
   kable_styling(latex_options = c('striped', 'HOLD_position')) %>%
   row_spec(0, bold = TRUE)
 ```
-__Lecture :__ `r length(which(df$grav == "Indemne"))` usagers sont ressortis indemnes d'un accident routier.
+__Lecture :__ `r length(which(df$grav == "Indemne"))` usagers sont ressortis indemnes d'un accident routier.  
 __Commentaire :__  Dans notre jeu de données, les usagers tués lors de l’accident sont sous-représentés avec `r length(which(df$grav == "Tué"))` individus contre `r length(which(df$grav == "Indemne"))` individus pour les usagers indemnes.
 
 #### Répartition des usagers par catégorie d'usagers 
-(ref:captablecatu) Effectifs des usagers par catégorie d'usagers
+(ref:captablecatu) Effectifs des usagers par catégorie d'usagers  
 __Source des données :__ Par les auteurs selon les données de 2019 du ministère de l’Intérieur.  
 __Cohorte :__ `r nrow(df)` usagers.  
 ```{r tablecatu, message = FALSE}
@@ -377,8 +370,9 @@ kable(tab_catu, format = 'latex', caption = "(ref:captablecatu)", booktabs = TRU
 __Lecture :__ `r length(which(df$catu == "Conducteur"))` des usagers impliqués dans un accident routier sont conducteurs.  
 __Commentaire :__  La place d’usager la plus représentée est celle correspondant au conducteur avec `r length(which(df$catu == "Conducteur"))` usagers tandis que la place la moins représentée est celle des passagers avec `r length(which(df$catu == "Passager"))` usagers.
 
+\newpage  
 #### Répartition des usagers par catégorie trajet 
-(ref:captabletrajet) Effectifs des usagers par type de trajet
+(ref:captabletrajet) Effectifs des usagers par type de trajet  
 __Source des données :__ Par les auteurs selon les données de 2019 du ministère de l’Intérieur.  
 __Cohorte :__ `r nrow(df)` usagers.  
 ```{r tabletrajet, message = FALSE}
@@ -396,8 +390,9 @@ kable(tab_trajet, format = 'latex', caption = "(ref:captabletrajet)", booktabs =
 ```
 __Lecture :__ `r length(which(df$trajet == "Domicile - Travail"))` usagers sont impliqués dans un accident corporel routier lors du trajet Domicile - Travail.  
 __Commentaire :__  Selon ce tableau d’effectifs, nous remarquons que le type de trajet pour lequel il y a le plus d’usagers impliqués dans les accidents est celui correspondant aux promenades et loisirs tandis que le type de trajet pour lequel nous avons le plus petit effectif est celui correspondant aux trajets domicile – école.  
+
 #### Répartition des usagers par condition atmosphérique 
-(ref:captablecond) Effectifs des usagers par condition atmosphérique
+(ref:captablecond) Effectifs des usagers par condition atmosphérique  
 __Source des données :__ Par les auteurs selon les données de 2019 du ministère de l’Intérieur.  
 __Cohorte :__ `r nrow(df)` usagers.  
 ```{r tablecond, message = FALSE}
@@ -413,8 +408,9 @@ kable(tab_cond, format = 'latex', caption = "(ref:captablecond)", booktabs = TRU
 __Lecture :__ `r length(which(df$atm == "Normale"))` usagers sont impliqués dans un accident corporel routier en condition atmosphérique normale.  
 __Commentaire :__  Selon ce tableau d’effectifs, nous remarquons que le type de condition atmosphérique pour lequel il y a le plus d’usagers impliqués dans les accidents est celui correspondant à la condition atmosphérique "normale" tandis que le type de condition atmosphérique pour lequel nous avons le plus petit effectif est celui correspondant à la condition "Vent Fort - Tempête".  
 
+\newpage  
 #### Répartition des usagers par surface
-(ref:captablesurf) Effectifs des usagers par surface
+(ref:captablesurf) Effectifs des usagers par surface  
 __Source des données :__ Par les auteurs selon les données de 2019 du ministère de l’Intérieur.  
 __Cohorte :__ `r nrow(df)` usagers.  
 ```{r tablesurf, message = FALSE}
@@ -428,8 +424,9 @@ kable(tab_surf, format = 'latex', caption = "(ref:captablesurf)", booktabs = TRU
 __Lecture :__ `r length(which(df$surf == "Normale"))` usagers sont impliqués dans un accident corporel routier sur surface normale.  
 __Commentaire :__  Selon ce tableau d’effectifs, nous remarquons que le type de surface pour lequel il y a le plus d’usagers impliqués dans les accidents est celui correspondant à la surface "normale" tandis que le type de surface pour lequel nous avons le plus petit effectif est celui correspondant à la surface "Boue".  
 
-#### Répartition des usagers par catégorie de route
-(ref:captablecatr) Effectifs des usagers par catégorie de route
+\newpage  
+#### Répartition des usagers par catégorie de route  
+(ref:captablecatr) Effectifs des usagers par catégorie de route  
 __Source des données :__ Par les auteurs selon les données de 2019 du ministère de l’Intérieur.  
 __Cohorte :__ `r nrow(df)` usagers.  
 ```{r tablecatr, message = FALSE}
@@ -440,14 +437,12 @@ tab_catr <- table(df$catr)
 kable(tab_catr, format = 'latex', caption = "(ref:captablecatr)", booktabs = TRUE) %>%
   kable_styling(latex_options = c('striped', 'HOLD_position')) %>%
   row_spec(0, bold = TRUE)
-
-tab_catr
 ```
 __Lecture :__ `r length(which(df$catr == "Autoroute"))` usagers sont impliqués dans un accident corporel routier sur autoroute.  
 __Commentaire :__  Selon ce tableau d’effectifs, nous remarquons que la catégorie de route pour laquelle il y a le plus d’usagers impliqués dans les accidents est celui correspondant à la catégorie "Voie communales" tandis que la catégorie pour laquelle nous avons le plus petit effectif est celle correspondant à la catégorie "Hors réseau public".  
 
 \newpage
-### Croisement de la gravité avec d'autres variables
+### Croisement de la gravité avec d'autres variables {#crois-grav}
 #### Répartition des usagers selon leur catégorie et la gravité  
 
 (ref:barplotcatu) Graphiques à bâtons sur les profils lignes, regroupement par catégorie d'usagers  
@@ -539,7 +534,7 @@ ggplot(df, aes(x = atm, fill = grav))+
 (ref:barplotroute) Graphiques à bâtons sur les profils lignes, regroupement par type de trajet  
 __Source des données :__ Par les auteurs selon les données de 2019 du ministère de l’Intérieur.  
 __Cohorte :__ `r nrow(df)` usagers.  
-__Lecture :__ 42% des usagers ayant un eu un accident alors que la condition atmosphérique était normale en ressortent indemnes. 
+__Lecture :__ 46% des usagers ayant un eu un accident sur autoroute en ressortent indemnes.  
 __Commentaire :__  Globalement, les usagers sont répartis de la même manière selon la gravité pour chaque type de route, avec en majorité des usagers qui ressortent indemnes ou blessés légèrement de l’accident. Ce sont sur les routes de types Départementales ou Hors réseau public que nous retrouvons le plus d'usagers blessés hospitalisés avec environ 25% des usagers de ces deux catégories.  
 ```{r}
 # Tableau de contingence catégorie de la route x gravité
@@ -567,7 +562,7 @@ ggplot(df, aes(x = catr, fill = grav)) +
 (ref:barplotsurface) Graphiques à bâtons sur les profils lignes, regroupement par type de trajet  
 __Source des données :__ Par les auteurs selon les données de 2019 du ministère de l’Intérieur.  
 __Cohorte :__ `r nrow(df)` usagers.  
-__Lecture :__ 42% des usagers ayant un eu un accident alors que la condition atmosphérique était normale en ressortent indemnes.   
+__Lecture :__ 42% des usagers ayant un eu un accident alors que la surface était normale en ressortent indemnes.   
 __Commentaire :__  Globalement, les usagers sont répartis de la même manière selon la gravité pour chaque type de surface, avec en majorité des usagers qui ressortent indemnes ou blessés légèrement de l’accident. Cependant, lorsque la surface est de la boue, la gravité de l'accident est plus importante. En effet, 40% des usagers ayant eu un accident routier sur de la boue en ressortent blessés hospitalisés et 4% en ressortent tués.  
 ```{r}
 # Tableau de contingence catégorie de la route x gravité
@@ -591,7 +586,7 @@ ggplot(df, aes(x = surf, fill = grav)) +
   
 \newpage
 ## Classification des individus
-### Choix du nombre de variables explicatives
+### Choix du nombre de variables explicatives {#choix-var}
 
 ```{r}
 ### On passe de 4 à 3 modalités pour grav (hospitalisé et tué sont regroupés)
@@ -614,11 +609,7 @@ data_test <- dtf[-train_id,]
 ```
 
 
-
-
-
-
-### Méthode de choix des données train/test
+### Méthode de choix des données train/test {#div-train-test}
 
 En vue de l'apprentissage des nos algorithmes de machine learning pour la prédiction, il est essentiel d'utiliser une méthode qui va choisir les données d'apprentissage et les données de test.  
 Ici nous divisons aléatoirement notre base en 2, le tableau ci-dessous décrit cette division.  
@@ -633,14 +624,13 @@ kable(table_traintest, format = 'latex', caption = "(ref:tabletraintest)", bookt
 ```
 
 \newpage
-### Méthode de régression logistique
+### Méthode de régression logistique {#reg-log}
 
 ```{r, include=FALSE}
 # Prédiction et erreur de prédiction
 modele.optimal<-multinom(formula = grav ~ ., data = data_train, model = TRUE, maxit = 600)
 pred.moda.modele.optimal<- predict(object = modele.optimal , newdata = data_test)
 erreur.modele.optimal <- mean(!(pred.moda.modele.optimal == data_test$grav))
-erreur.modele.optimal
 # 33.6% avec ce modèle optimal; avec toutes les variables (modèle complet): 33,46% code ci-dessous
 #modele.complet<-multinom(formula = grav ~ ., data = df2[train_id,], model = TRUE, maxit = 600)
 #pred.moda.modele.complet<- predict(object = modele.complet , newdata =  df2[-train_id,])
@@ -693,12 +683,12 @@ ggplot(data = plotTable, mapping = aes(x = Reference, y = Prediction, fill = goo
 La méthode de régression logistique multinomiale donne une erreur de prédiction de `r round(100*mean(resultats),2)`% déterminée par cross-validation.
 On représente la répartition des bonnes et mauvaises prédictions sur le graphe suivant.  
 
-(ref:confusionlog) Matrice de confusion représentant les résultats de la prédiction par régression logistique multinomiale.
+(ref:confusionlog) Matrice de confusion représentant les résultats de la prédiction par régression logistique multinomiale.  
 __Source des données :__ Par les auteurs selon les données de 2019 du ministère de l’Intérieur.  
 __Lecture :__ Le modèle prédictif donne 13474 bonnes prédiction pour la modalité "Indemne".  
 
 \newpage  
-### Méthode XGBoost
+### Méthode XGBoost {#xgboost}
 
 ```{r, include = FALSE}
 # Encodage
@@ -719,8 +709,9 @@ conf <- confusionMatrix(data = factor(pred_xg), reference = Y_test$grav)
 ```
 
 La méthode XGBoost otpimale donne un taux d'erreur de `r round(err_xg,2)`%, on obtient donc un modèle prédictif donnant `r 1 - round(err_xg,2)`% de bonnes prédictions. Pour que cette méthode soit optimale nous avons donné à notre algorithme les paramètres suivants :  
+
 * Profondeur maximale des arbres : 10  
-* Nombre maximal d'itérations : 50.
+* Nombre maximal d'itérations : 50.  
 
 On représente la répartition des bonnes et mauvaises prédictions sur le graphe suivant.  
 
@@ -747,7 +738,7 @@ __Source des données :__ Par les auteurs selon les données de 2019 du ministè
 __Lecture :__ Le modèle prédictif donne `r table['Freq'][1,1]` bonnes prédiction pour la modalité "Indemne".  
 
 \newpage  
-### Méthode Random Forest  
+### Méthode Random Forest  {#random-forest}
 
 ```{r, include = FALSE}
 # Ajustement d'une forêt aléatoire pour la prédiction de la gravité
@@ -766,6 +757,7 @@ conf <- confusionMatrix(data = pred_rf, reference = data_test$grav)
 ```
 
 La méthode Random Forest donne un taux d'erreur de `r round(err_rf,2)`%, on obtient dans un modèle prédictif donnant `r 1 - round(err_rf,2)`% de bonnes prédictions. Pour que cette méthode soit optimale nous avons donné à notre algorithme les paramètres suivants :  
+
 * Nombre d'arbres : 100  
 * Nombre de variables échantillonnées au hasard comme candidats à chaque coupure : 2.
 
@@ -793,7 +785,7 @@ __Source des données :__ Par les auteurs selon les données de 2019 du ministè
 __Lecture :__ Le modèle prédictif donne `r table['Freq'][1,1]` bonnes prédiction pour la modalité "Indemne".  
 
 \newpage
-## Dictionnaire des variables  
+## Dictionnaire des variables  {#dico-var}
 * __Base caractéristiques__ :  
   * Num_acc : Numéro d'identifiant de l'accident  
   
