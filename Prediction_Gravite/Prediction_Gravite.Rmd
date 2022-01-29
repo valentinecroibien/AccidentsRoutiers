@@ -601,7 +601,7 @@ ggplot(data = plotTable, mapping = aes(x = Reference, y = Prediction, fill = goo
 
 (ref:confusionrf) Matrice de confusion représentant les résultats de la prédiction Random Forest  
 __Source des données :__ Par les auteurs selon les données de 2019 du ministère de l’Intérieur.  
-__Lecture :__ Le modèle prédictif donne 13479 bonnes prédiction pour la modalité "Indemne".  
+__Lecture :__ Le modèle prédictif donne 13323 bonnes prédiction pour la modalité "Indemne".  
 
 \newpage
 ## Dictionnaire des variables  
