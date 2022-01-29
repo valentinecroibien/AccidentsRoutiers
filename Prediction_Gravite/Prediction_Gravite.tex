@@ -297,10 +297,12 @@ Nous réalisons des jointures entre les différentes bases sur l'identifiant de 
 Cependant, en réalisant notre jointure, nous obtenons une base de données avec une soixantaine de variables.\\
 Nous choisissons donc de réaliser un premier tri sur ces variables et de garder les variables suivantes :
 
-* L'identifiant de l'accident \textbar{} * La date \textbar{}
-
 \begin{itemize}
 \tightlist
+\item
+  L'identifiant de l'accident,
+\item
+  La date,
 \item
   L'heure et minute,
 \item
@@ -535,7 +537,7 @@ Ici nous divisons aléatoirement notre base en 2, le tableau ci-dessous décrit 
 
 \begin{table}[H]
 
-\caption{\label{tab:tabletraintest}Repartition des observation en vue de l'apprentissage}
+\caption{\label{tab:tabletraintest}Répartition des observation en vue de l'apprentissage}
 \centering
 \begin{tabular}[t]{lrr}
 \toprule
@@ -552,10 +554,20 @@ test & 39258 & 30\\
 \hypertarget{muxe9thode-de-ruxe9gression-logistique}{%
 \subsubsection{Méthode de régression logistique}\label{muxe9thode-de-ruxe9gression-logistique}}
 
+La méthode de régression logistique multinomiale donne une erreur de prédiction de \texttt{r}\% déterminée par cross-validation.
+On représente la répartition des bonnes et mauvaises prédictions sur le graphe suivant.
+
+
+
+
+
 \newpage
 
 \hypertarget{muxe9thode-xgboost}{%
 \subsubsection{Méthode XGBoost}\label{muxe9thode-xgboost}}
+
+La méthode XGBoost donne un taux d'erreur de 0.36\%.\\
+On représente la répartition des bonnes et mauvaises prédictions sur le graphe suivant.
 
 \begin{figure}[ht!]
 
@@ -568,9 +580,6 @@ test & 39258 & 30\\
 \textbf{Lecture :} Le modèle prédictif donne 13479 bonnes prédiction pour la modalité ``Indemne.''}\label{fig:confusionxgb}
 \end{figure}
 
-La méthode XGBoost donne un taux d'erreur de 0.36\%.\\
-On représente la répartition des bonnes et mauvaises prédictions sur le graphe suivant.
-
 
 
 
@@ -580,6 +589,9 @@ On représente la répartition des bonnes et mauvaises prédictions sur le graph
 \hypertarget{muxe9thode-random-forest}{%
 \subsubsection{Méthode Random Forest}\label{muxe9thode-random-forest}}
 
+La méthode Random Forest donne un taux d'erreur de 0.33\%.\\
+On représente la répartition des bonnes et mauvaises prédictions sur le graphe suivant.
+
 \begin{figure}[ht!]
 
 {\centering \includegraphics{Prediction_Gravite_files/figure-latex/confusionrf-1} 
@@ -588,11 +600,8 @@ On représente la répartition des bonnes et mauvaises prédictions sur le graph
 
 \caption{Matrice de confusion représentant les résultats de la prédiction Random Forest\\
 \textbf{Source des données :} Par les auteurs selon les données de 2019 du ministère de l'Intérieur.\\
-\textbf{Lecture :} Le modèle prédictif donne 13479 bonnes prédiction pour la modalité ``Indemne.''}\label{fig:confusionrf}
+\textbf{Lecture :} Le modèle prédictif donne 13323 bonnes prédiction pour la modalité ``Indemne.''}\label{fig:confusionrf}
 \end{figure}
-
-La méthode Random Forest donne un taux d'erreur de 0.33\%.\\
-On représente la répartition des bonnes et mauvaises prédictions sur le graphe suivant.
 
 
 
